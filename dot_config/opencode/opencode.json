@@ -10,6 +10,11 @@
       "type": "remote",
       "url": "http://127.0.0.1:3845/mcp",
       "enabled": true
+    },
+    "feishu-mcp": {
+      "type": "remote",
+      "url": "https://open.feishu.cn/mcp/stream/mcp_xxx",
+      "enabled": true
     }
   }
 }
