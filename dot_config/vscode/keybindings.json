@@ -1,0 +1,18 @@
+// Place your key bindings in this file to override the defaultsauto[]
+[
+  // vscodevim.vim
+  {
+    "key": "ctrl+shift+alt+v",
+    "command": "toggleVim" // 切换Vim插件的启用和禁用
+  },
+  {
+    "key": "ctrl+d",
+    "command": "-extension.vim_ctrl+d", // 取消Vim插件下ctrl+d的默认行为，恢复成vscode的默认行为
+    "when": "editorTextFocus && vim.active && vim.use<C-d> && !inDebugRepl"
+  },
+  {
+    "key": "shift+alt+down",
+    "command": "-extension.vim_cmd+alt+down", // 取消Vim插件下shift+alt+down的默认行为，恢复成vscode的默认行为
+    "when": "editorTextFocus && vim.active && !inDebugRepl"
+  }
+]

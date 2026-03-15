@@ -1,36 +1,76 @@
+
 if status is-interactive
 # Commands to run in interactive sessions can go here
 end
 
-# /opt/homebrew/bin/brew shellenv | source
-
-fish_add_path ~/Documents/software
-fish_add_path ~/Documents/software/nvim-macos-arm64/bin
-
+# -------- variable --------
 set -Ux EDITOR nvim
 set -Ux VISUAL nvim
 
-# source "$HOME/.cargo/env.fish"
+fish_add_path ~/.local/bin
+fish_add_path ~/Documents/software
+fish_add_path ~/Documents/software/nvim-macos-arm64/bin
 
-starship init fish | source
+# -------- vi mode --------
+# set -g fish_key_bindings fish_vi_key_bindings
 
-zoxide init fish | source
-
-function y
-  set tmp (mktemp -t "yazi-cwd.XXXXXX")
-  command yazi $argv --cwd-file="$tmp"
-  if read -z cwd < "$tmp"; and [ "$cwd" != "$PWD" ]; and test -d "$cwd"
-	  builtin cd -- "$cwd"
-  end
-  rm -f -- "$tmp"
-end
-
-fnm env --use-on-cd --shell fish | source
-
+# -------- alias --------
 function n
   nvim $argv
 end
 
 function g
   lazygit $argv
+end
+
+function y
+  set tmp (mktemp -t "yazi-cwd.XXXXXX")
+  yazi $argv --cwd-file="$tmp"
+  if set cwd (command cat -- "$tmp"); and [ -n "$cwd" ]; and [ "$cwd" != "$PWD" ]
+    builtin cd -- "$cwd"
+  end
+  rm -f -- "$tmp"
+end
+
+# -------- application --------
+# if [ -f "/opt/homebrew/bin/brew" ]
+#   /opt/homebrew/bin/brew shellenv | source
+# end
+
+if type -q starship
+  starship init fish | source
+end
+
+set FNM_PATH "/data/data/com.termux/files/home/.local/share/fnm"
+if [ -d "$FNM_PATH" ]
+  set PATH $FNM_PATH $PATH
+  fnm env | source
+end
+if type -q fnm
+  fnm env --use-on-cd --shell fish | source
+  fnm completions --shell fish | source
+end
+
+if type -q uv
+  uv generate-shell-completion fish | source
+  uvx --generate-shell-completion fish | source
+end
+
+if type -q zoxide
+  zoxide init fish | source
+end
+
+if type -q glow
+  glow completion fish | source
+end
+
+if not type -q nix
+  set nix_daemon_fish_path '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish'
+  if test -e "$nix_daemon_fish_path"
+    source "$nix_daemon_fish_path"
+  end
+  set nix_completion_fish_path '/nix/var/nix/profiles/default/share/fish/vendor_completions.d/nix.fish'
+  if test -e "$nix_completion_fish_path"
+    source "$nix_completion_fish_path"
+  end
 end

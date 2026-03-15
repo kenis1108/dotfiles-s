@@ -1,0 +1,58 @@
+{
+  /* theme && font------------------------------- */
+  "workbench.iconTheme": "vscode-icons",
+  "workbench.colorTheme": "Catppuccin Mocha",
+  "workbench.activityBar.location": "top",
+  "editor.fontFamily": "Menlo, Monaco, 'JetBrainsMono Nerd Font Mono', monospace",
+  // git
+  "git.autofetch": true,
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false, // 不要跳确认弹窗
+  // 不要隐藏项目里的.git文件夹
+  "files.exclude": {
+    "**/.git": false
+  },
+  // edit
+  "files.autoSave": "onFocusChange",
+  "editor.fontSize": 18,
+  "editor.tabSize": 2,
+  "editor.detectIndentation": false,
+  "editor.formatOnSave": false,
+  "editor.lineNumbers": "relative", // 相对行号
+  "editor.cursorSmoothCaretAnimation": "on", // 启用平滑的光标移动动画
+  "workbench.colorCustomizations": {
+    "editorBracketMatch.background": "#02fd30" // 自定义括号配对显示的颜色
+  },
+  // javascript & typescript inlay hints
+  "javascript.inlayHints.functionLikeReturnTypes.enabled": true,
+  "javascript.inlayHints.parameterNames.enabled": "all",
+  "javascript.inlayHints.parameterTypes.enabled": true,
+  "javascript.inlayHints.propertyDeclarationTypes.enabled": true,
+  "javascript.inlayHints.variableTypes.enabled": true,
+  "typescript.inlayHints.enumMemberValues.enabled": true,
+  "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+  "typescript.inlayHints.parameterNames.enabled": "all",
+  "typescript.inlayHints.parameterTypes.enabled": true,
+  "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
+  "typescript.inlayHints.variableTypes.enabled": true,
+  /* explorer----------------------------------- */
+  "explorer.confirmDelete": false, // 删除文件的时候不要弹窗
+  "explorer.confirmPasteNative": false, // 从资源管理器直接复制粘贴文件到vscode不弹窗
+  "explorer.confirmDragAndDrop": false, // 拖拽文件到vscode不弹窗
+  /* ------------------------------------------ */
+  /* mcp                                        */
+  /* ------------------------------------------ */
+  "chat.mcp.gallery.enabled": true,
+  /* ------------------------------------------ */
+  /* extensions                                 */
+  /* ------------------------------------------ */
+  // vscodevim.vim
+  "vim.useCtrlKeys": false,
+  "vim.useSystemClipboard": true,
+  // asvetliakov.vscode-neovim
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+  "vscode-neovim.ctrlKeysForInsertMode": [], // 让ctrl键在Insert Mode下不要穿透到neovim,保持由vscode处理
+  "vscode-neovim.ctrlKeysForNormalMode": [] // 让ctrl键在Normal Mode下不要穿透到neovim,保持由vscode处理
+}
