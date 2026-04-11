@@ -35,15 +35,25 @@ require('blink.cmp').setup({
 })
 
 -- -------- LSP --------
-vim.pack.add({ gh('neovim/nvim-lspconfig'), gh('mason-org/mason.nvim'), gh('WhoIsSethDaniel/mason-tool-installer.nvim') })
+-- 个人理解
+-- nvim-lspconfig 是一些neovim官方预设的lsp配置文件，可以直接vim.lsp.enable('$lsp_name')。
+-- mason.nvim 是一个安装和管理lsp、dap、linters、formatters工具的统一界面。
+-- mason-lspconfig.nvim 用于自动启用nvim-lspconfig里有的且mason已安装的lsp。
+-- mason-tool-installer.nvim 用于在启动时自动安装和更新mason里各种工具。
+vim.pack.add({ gh('neovim/nvim-lspconfig'), gh('mason-org/mason.nvim'), gh('mason-org/mason-lspconfig.nvim'), gh('WhoIsSethDaniel/mason-tool-installer.nvim') })
 map("n", "<leader>m", "<cmd>Mason<cr>", { desc = "Mason" })
 require('mason').setup()
+require("mason-lspconfig").setup()
+local is_termux = vim.env.TERMUX_VERSION ~= nil
+local ensure_installed = {}
+if not is_termux then
+  table.insert(ensure_installed, 'lua-language-server')
+else
+  vim.lsp.enable('lua_ls')
+end
 require('mason-tool-installer').setup({
-  ensure_installed = {
-    'lua-language-server'
-  }
+  ensure_installed = ensure_installed
 })
-vim.lsp.enable('lua_ls')
 
 -- -------- others --------
 vim.pack.add({ gh('nvim-mini/mini.pairs') })
