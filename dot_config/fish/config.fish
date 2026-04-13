@@ -8,8 +8,6 @@ set -Ux EDITOR nvim
 set -Ux VISUAL nvim
 
 fish_add_path ~/.local/bin
-fish_add_path ~/Documents/software
-fish_add_path ~/Documents/software/nvim-macos-arm64/bin
 
 # -------- vi mode --------
 # set -g fish_key_bindings fish_vi_key_bindings
@@ -75,7 +73,11 @@ function g
 end
 
 function l
-  ls -a --color=auto
+  eza --color=always --icons --group-directories-first $argv
+end
+
+function ll
+  eza -la --color=always --icons --group-directories-first $argv
 end
 
 function n
