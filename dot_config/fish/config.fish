@@ -32,6 +32,14 @@ function y
   rm -f -- "$tmp"
 end
 
+function ls
+  eza --color=always --icons --group-directories-first $argv
+end
+
+function ll
+  eza -la --color=always --icons --group-directories-first $argv
+end
+
 # -------- application --------
 # if [ -f "/opt/homebrew/bin/brew" ]
 #   /opt/homebrew/bin/brew shellenv | source
