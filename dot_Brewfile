@@ -1,8 +1,15 @@
 tap "deskflow/tap"
+tap "nikitabobko/tap"
 # Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# GNU internationalization (i18n) and localization (l10n) library
+brew "gettext"
 # Manage your dotfiles across multiple diverse machines, securely
 brew "chezmoi"
+# Cross-platform make
+brew "cmake"
+# Modern, maintained replacement for ls
+brew "eza"
 # Like neofetch, but much faster because written mostly in C
 brew "fastfetch"
 # Simple, fast and user-friendly alternative to find
@@ -15,6 +22,8 @@ brew "fish"
 brew "fnm"
 # Command-line fuzzy finder written in Go
 brew "fzf"
+# GitHub command-line tool
+brew "gh"
 # Render markdown on the CLI
 brew "glow"
 # Tools and libraries to manipulate images in many formats
@@ -25,6 +34,8 @@ brew "jq"
 brew "lazygit"
 # Deep clean and optimize your Mac
 brew "mole"
+# Small build system for use with gyp or CMake
+brew "ninja"
 # PDF rendering library (based on the xpdf-3.0 code base)
 brew "poppler"
 # SVG rendering tool and library
@@ -35,10 +46,26 @@ brew "ripgrep"
 brew "sevenzip"
 # Cross-shell prompt for astronauts
 brew "starship"
+# Extremely fast Python package installer and resolver, written in Rust
+brew "uv"
 # Blazing fast terminal file manager written in Rust, based on async I/O
 brew "yazi"
+# Pluggable terminal workspace, with terminal multiplexer as the base feature
+brew "zellij"
+# Programming language designed for robustness, optimality, and clarity
+brew "zig"
 # Shell extension to navigate your filesystem faster
 brew "zoxide"
+# AeroSpace is an i3-like tiling window manager for macOS
+cask "nikitabobko/tap/aerospace"
+# Tools for building Android applications
+cask "android-studio"
+# Display management tool
+cask "betterdisplay"
+# Terminal-based AI coding assistant
+cask "claude-code"
+# OpenAI's Codex desktop app for managing coding agents
+cask "codex-app"
 # Write, edit, and chat about your code with AI
 cask "cursor"
 # Mouse and keyboard sharing utility
@@ -53,18 +80,32 @@ cask "figma"
 cask "firefox"
 cask "font-jetbrains-mono-nerd-font"
 cask "font-symbols-only-nerd-font"
+# Terminal emulator that uses platform-native UI and GPU acceleration
+cask "ghostty"
+# Web browser
+cask "google-chrome"
+# Desktop automation application
+cask "hammerspoon"
+# Tool for multi-language users
+cask "input-source-pro"
 # Open-source screen recorder built with web technology
 cask "kap"
+# Keyboard customiser
+cask "karabiner-elements"
 # GPU-based terminal emulator
 cask "kitty"
 # Mouse utility to add gesture functions and smooth scrolling to 3rd party mice
 cask "mac-mouse-fix"
+# Multi-platform web browser
+cask "microsoft-edge"
 # Control your tools with a few keystrokes
 cask "raycast"
 # Snip or pin screenshots
 cask "snipaste"
 # Open-source code editor
 cask "visual-studio-code"
+# Multiplayer code editor
+cask "zed"
 vscode "catppuccin.catppuccin-vsc"
 vscode "eamodio.gitlens"
 vscode "github.codespaces"
