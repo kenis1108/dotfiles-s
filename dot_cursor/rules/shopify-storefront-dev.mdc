@@ -188,7 +188,7 @@ alwaysApply: true
 
 ### 调试页面说明
 
-- **必须使用在线预览链接**进行调试，店铺域名格式: `{国家代码小写}.ecoflow.com`（如 `ca.ecoflow.com`、`ng.ecoflow.com`）
+- **必须使用在线预览链接**进行调试，店铺域名格式: `{国家代码小写}.shopify.com`（如 `ca.shopify.com`、`ng.shopify.com`）
 - **禁止使用本地地址** `http://127.0.0.1:port` 作为调试页面
 - 用户会手动提前打开预览页面并保持在浏览器最后一个标签页
 
@@ -196,7 +196,7 @@ alwaysApply: true
 
 1. `list_pages` → 获取浏览器打开的页面列表
 2. `select_page` → 选中目标页面（pageId + bringToFront: true）
-3. **默认选择浏览器中最后一个标签页**，确认其域名为 `{国家代码}.ecoflow.com`
+3. **默认选择浏览器中最后一个标签页**，确认其域名为 `{国家代码}.shopify.com`
 
 ### 修改后验证流程
 
