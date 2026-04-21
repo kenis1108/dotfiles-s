@@ -11,5 +11,6 @@ exec "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
   --remote-debugging-port=XXXX \
   --user-data-dir="~/.chrome/xx"
 
+# 用回默认配置: 使用参数 --profile-directory="Default"
 # default path: $HOME/Library/Application Support/Google/Chrome
 # default port: 9222
