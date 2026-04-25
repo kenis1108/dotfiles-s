@@ -12,6 +12,16 @@ function Linemode:size_and_mtime()
   return string.format("%s %s", size and ya.readable_size(size) or "-", time)
 end
 
+function ensure_plugin(plugin)
+	local ok = pcall(require, plugin)
+	if not ok then
+		os.execute("ya pkg add " .. plugin .. " >/dev/null 2>&1")
+	end
+end
+
+ensure_plugin("yazi-rs/plugins:full-border")
+ensure_plugin("Rolv-Apneseth/starship")
+
 -- install via "ya pkg add yazi-rs/plugins:full-border"
 require("full-border"):setup()
 

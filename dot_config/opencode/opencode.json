@@ -4,22 +4,23 @@
     "chrome-devtools-auto": {
       "type": "local",
       "command": ["npx", "chrome-devtools-mcp@latest", "--autoConnect"],
-      "enabled": true
+      "enabled": false
     },
     "Figma Desktop": {
       "type": "remote",
       "url": "http://127.0.0.1:3845/mcp",
-      "enabled": true
+      "enabled": false
     },
     "feishu-mcp": {
       "type": "remote",
       "url": "https://open.feishu.cn/mcp/stream/mcp_xxx",
-      "enabled": true
+      "enabled": false
     },
     "shopify-dev-mcp": {
       "type": "local",
       "command": ["npx", "-y", "@shopify/dev-mcp@latest"],
-      "enabled": true
+      // "command": ["shopify-dev-mcp"],
+      "enabled": false
     }
   }
 }
