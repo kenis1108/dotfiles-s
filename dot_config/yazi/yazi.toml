@@ -4,6 +4,6 @@ show_hidden = true
 
 [opener]
 play = [
-	{ run = 'mpv "$@"', orphan = true, for = "unix" },
-	{ run = 'mpv %*', orphan = true, for = "windows" },
+	{ run = "mpv %s", orphan = true, for = "unix" },
+	{ run = "mpv %s", orphan = true, for = "windows" },
 ]
