@@ -6,6 +6,10 @@ else
   SHELL_TYPE="bash"
 fi
 
+if command -v fzf &> /dev/null; then
+  eval "$(fzf --$SHELL_TYPE)"
+fi
+
 if command -v jj &> /dev/null; then
   source <(jj util completion $SHELL_TYPE)
 fi

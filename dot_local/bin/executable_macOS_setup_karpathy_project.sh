@@ -14,6 +14,7 @@ if [ ! -f ".gitignore" ]; then
 fi
 
 if ! grep -qxF "AGENTS.md" .gitignore; then
+  echo >> .gitignore
   echo "AGENTS.md" >> .gitignore
   echo "已将 AGENTS.md 加入 .gitignore"
 else
