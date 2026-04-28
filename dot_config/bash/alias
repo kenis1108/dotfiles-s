@@ -1,0 +1,32 @@
+alias c='curl -LO'
+alias f='fastfetch'
+alias g='lazygit'
+alias l='eza --color=always --icons --group-directories-first'
+alias ll='eza -la --color=always --icons --group-directories-first'
+alias n='nvim'
+alias o='opencode'
+alias s='shasum -a 256'
+alias t='tmux'
+
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
+alias ze='zellij'
+
+# 中证VPN
+alias dhip='sudo dhclient vpn_test;sh /home/kk/vpn/iproute.sh'
+alias startvpn='cd;cd vpn/vpnclient;sudo ./vpnclient start;sudo ./vpncmd'
+# 山西证券子公司VPN
+alias motion='/opt/MotionPro/MotionPro.sh'
+# 鸽子内网穿透
+alias startnpc='cd ~/Downloads/linux_amd64_client;./npc -server=f1.fgct.cc:8024 -vkey=159abe614d'
+# 使ranger退出时停留在选中的目录中
+alias ranger='ranger --choosedir=$HOME/.rangerdir;set -l LASTDIR (cat $HOME/.rangerdir);cd "$LASTDIR"'
+
+

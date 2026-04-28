@@ -1,0 +1,50 @@
+if [ -n "$BASH_VERSION" ]; then
+  SHELL_TYPE="bash"
+elif [ -n "$ZSH_VERSION" ]; then
+  SHELL_TYPE="zsh"
+else
+  SHELL_TYPE="bash"
+fi
+
+if command -v jj &> /dev/null; then
+  source <(jj util completion $SHELL_TYPE)
+fi
+
+if command -v starship &> /dev/null; then
+  eval "$(starship init $SHELL_TYPE)"
+fi
+
+FNM_PATH="~/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="$FNM_PATH:$PATH"
+  eval "`fnm env`"
+fi
+if command -v fnm &> /dev/null; then
+  eval "$(fnm env --use-on-cd --shell $SHELL_TYPE)"
+  eval "$(fnm completions --shell $SHELL_TYPE)"
+fi
+
+if command -v uv &> /dev/null; then
+  eval "$(uv generate-shell-completion $SHELL_TYPE)"
+  eval "$(uvx --generate-shell-completion $SHELL_TYPE)"
+fi
+
+if command -v zoxide &> /dev/null; then
+  eval "$(zoxide init $SHELL_TYPE)"
+fi
+
+if command -v glow &> /dev/null; then
+  eval "$(glow completion $SHELL_TYPE)"
+fi
+
+if command -v direnv &> /dev/null; then
+  eval "$(direnv hook $SHELL_TYPE)"
+fi
+
+# 判断是否是 WSL 环境
+if [ -n "$WSL_DISTRO_NAME" ]; then
+  # 如果是 WSL 环境，执行 fcitx5 命令
+  fcitx5 --disable=wayland -d --verbose '*'=0 >/dev/null 2>&1
+else
+  :
+fi
