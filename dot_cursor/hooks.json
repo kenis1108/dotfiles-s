@@ -1,6 +1,17 @@
 {
   "version": 1,
   "hooks": {
-    "afterFileEdit": [{ "command": "./hooks/example.sh" }]
+    "stop": [
+      {
+        "command": "./hooks/feishu-notify.sh",
+        "timeout": 25
+      }
+    ],
+    "sessionEnd": [
+      {
+        "command": "./hooks/feishu-notify.sh",
+        "timeout": 25
+      }
+    ]
   }
 }
