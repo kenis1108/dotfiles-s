@@ -169,6 +169,36 @@ rm -f "$EZA_DIR/eza.tar.gz"
 ln -sf "$HOME/.local/opt/eza/eza" "$HOME/.local/bin/eza"
 echo "[bootstrap] eza installed"
 
+FD_VERSION=10.4.2
+FD_RELEASE_URL="https://github.com/sharkdp/fd/releases/download/v${FD_VERSION}/fd-v${FD_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+FD_DIR=$HOME/.local/opt/fd
+
+if [ -d "$FD_DIR" ]; then
+  rm -rf "$FD_DIR"
+fi
+mkdir -p "$FD_DIR"
+echo "[bootstrap] Downloading fd ${FD_VERSION}..."
+curl -fsSL -o "$FD_DIR/fd.tar.gz" "$FD_RELEASE_URL"
+tar -xzf "$FD_DIR/fd.tar.gz" -C "$FD_DIR" --strip-components=1
+rm -f "$FD_DIR/fd.tar.gz"
+ln -sf "$HOME/.local/opt/fd/fd" "$HOME/.local/bin/fd"
+echo "[bootstrap] fd installed"
+
+RG_VERSION=15.1.0
+RG_RELEASE_URL="https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl.tar.gz"
+RG_DIR=$HOME/.local/opt/ripgrep
+
+if [ -d "$RG_DIR" ]; then
+  rm -rf "$RG_DIR"
+fi
+mkdir -p "$RG_DIR"
+echo "[bootstrap] Downloading ripgrep ${RG_VERSION}..."
+curl -fsSL -o "$RG_DIR/rg.tar.gz" "$RG_RELEASE_URL"
+tar -xzf "$RG_DIR/rg.tar.gz" -C "$RG_DIR" --strip-components=1
+rm -f "$RG_DIR/rg.tar.gz"
+ln -sf "$HOME/.local/opt/ripgrep/rg" "$HOME/.local/bin/rg"
+echo "[bootstrap] ripgrep installed"
+
 if command -v npm &>/dev/null; then
   echo "[bootstrap] Installing opencode-ai..."
   npm install -g opencode-ai 2>/dev/null
