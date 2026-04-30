@@ -1,3 +1,6 @@
+[core]
+	ignorecase = false
+
 [user]
   email = {{ .gitconfig.email | quote }}
   name = {{ .gitconfig.name | quote }}
@@ -16,3 +19,6 @@
 
 [http]
   postBuffer = 1048576000
+
+[alias]
+	tree = log --graph --oneline --all --decorate
