@@ -1,0 +1,12 @@
+name: nvim_nvchad
+services:
+    alpine:
+        working_dir: /root
+        volumes:
+            - ~/.local/share/chezmoi:/root/dotfiles
+            - ~/.config/nvim_nvchad:/root/.config/nvim
+            - /mnt/hgfs/shared:/root/shared
+        stdin_open: true
+        tty: true
+        image: alpine:latest
+        command: sh -uelic 'apk add gcompat libc6-compat bash curl unzip git python3 py3-pip nodejs npm neovim neovim-doc ripgrep build-base wget yazi fzf fish --update;sh'
