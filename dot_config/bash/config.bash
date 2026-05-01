@@ -1,13 +1,8 @@
 # -------- variable --------
-export EDITOR=nvim
-export VISUAL=nvim
-# export EDITOR="env NVIM_APPNAME=nvim_nvchad nvim"
-# export VISUAL="env NVIM_APPNAME=nvim_nvchad nvim"
-
-export PATH="$HOME/.local/bin:$PATH"
+. "$HOME/.config/bash/variable"
 
 # -------- application --------
-source "$HOME/.config/bash/application"
+. "$HOME/.config/bash/application"
 
 # -------- alias --------
-source "$HOME/.config/bash/alias"
+. "$HOME/.config/bash/alias"
