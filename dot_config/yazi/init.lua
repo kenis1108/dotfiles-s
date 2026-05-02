@@ -38,6 +38,7 @@ ensure_flavor(
 
 ensure_plugin("yazi-rs/plugins:full-border")
 ensure_plugin("Rolv-Apneseth/starship")
+ensure_plugin("yazi-rs/plugins:vcs-files")
 ensure_plugin("AnirudhG07/plugins-yazi:copy-file-contents")
 
 -- install via "ya pkg add yazi-rs/plugins:full-border"
