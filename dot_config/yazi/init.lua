@@ -42,6 +42,7 @@ ensure_plugin("AnirudhG07/plugins-yazi:copy-file-contents")
 ensure_plugin("yazi-rs/plugins:vcs-files")
 ensure_plugin("yazi-rs/plugins:git")
 ensure_plugin("AminurAlam/yazi-plugins:preview-git")
+ensure_plugin("Lil-Dank/lazygit")
 
 -- install via "ya pkg add yazi-rs/plugins:full-border"
 require("full-border"):setup()

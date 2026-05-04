@@ -1,6 +1,10 @@
+local function augroup(name)
+  return vim.api.nvim_create_augroup("kenvim_" .. name, { clear = true })
+end
+
 -- Highlight on yank
 vim.api.nvim_create_autocmd("TextYankPost", {
-  group = vim.api.nvim_create_augroup('highlight_yank', { clear = true }),
+  group = augroup("highlight_yank"),
   callback = function()
     (vim.hl or vim.highlight).on_yank()
   end,
