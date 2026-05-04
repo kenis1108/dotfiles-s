@@ -55,12 +55,10 @@ map("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
 map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 
 -- file manager
--- map("n", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "nvimtree toggle window" })
--- map("v", "<C-n>", "<cmd>NvimTreeToggle<CR>", { desc = "nvimtree toggle window" })
 -- map("n", "<leader>e", "<cmd>Ve<CR>", { desc = "Open Netrw" })
 -- map("v", "<leader>e", "<cmd>Ve<CR>", { desc = "Open Netrw" })
--- map("n", "<leader>e", "<cmd>Yazi cwd<cr>", { desc = "Open Yazi in nvim's working directory" })
--- map("v", "<leader>e", "<cmd>Yazi cwd<cr>", { desc = "Open Yazi in nvim's working directory" })
+-- map("n", "<leader>e", "<cmd>Yazi cwd<cr>", { desc = "Open Yazi in working directory" })
+-- map("v", "<leader>e", "<cmd>Yazi cwd<cr>", { desc = "Open Yazi in working directory" })
 
 -- telescope
 map("n", "<leader>fb", "<cmd>Telescope builtin<cr>", { desc = "telescope find builtin" })
