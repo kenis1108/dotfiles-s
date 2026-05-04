@@ -62,19 +62,20 @@ map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 
 -- telescope
 map("n", "<leader>fb", "<cmd>Telescope builtin<cr>", { desc = "telescope find builtin" })
-map("n", "<leader>ffc", function()
+map("n", "<leader>fc", function()
 	require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })
 end, { desc = "telescope find config" })
-map("n", "<leader>ffcl", function()
-	require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root })
-end, { desc = "telescope find config(lazy.nvim)" })
-map("n", "<leader>fwc", function()
+map("n", "<leader>fd", function()
+	require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root or vim.fn.stdpath('data') })
+end, { desc = "telescope find data" })
+map("n", "<leader>/c", function()
 	require("telescope.builtin").live_grep({ cwd = vim.fn.stdpath("config") })
 end, { desc = "telescope live grep config" })
-map("n", "<leader>fwcl", function()
-	require("telescope.builtin").live_grep({ cwd = require("lazy.core.config").options.root })
-end, { desc = "telescope live grep config(lazy.nvim)" })
+map("n", "<leader>/d", function()
+	require("telescope.builtin").live_grep({ cwd = require("lazy.core.config").options.root or vim.fn.stdpath('data') })
+end, { desc = "telescope live grep data" })
 
+vim.notify(vim.fn.stdpath('data'))
 -- 使用 <leader>v 触发可视块模式
 map({ "n", "v" }, "<leader>v", "<C-V>", { desc = "Visual Block Mode" })
 
@@ -191,5 +192,5 @@ _G.run_visual_selection = function()
 	lua_exec("v")
 end
 
-map("n", "<leader>rc", _G.run_current_line, { desc = "Execute current line as Nvim Lua" })
-map("x", "<leader>rc", _G.run_visual_selection, { desc = "Execute selection as Nvim Lua" })
+map("n", "<LocalLeader>r", _G.run_current_line, { desc = "Execute current line as Nvim Lua" })
+map("x", "<LocalLeader>r", _G.run_visual_selection, { desc = "Execute selection as Nvim Lua" })
