@@ -75,7 +75,6 @@ map("n", "<leader>/d", function()
 	require("telescope.builtin").live_grep({ cwd = require("lazy.core.config").options.root or vim.fn.stdpath('data') })
 end, { desc = "telescope live grep data" })
 
-vim.notify(vim.fn.stdpath('data'))
 -- 使用 <leader>v 触发可视块模式
 map({ "n", "v" }, "<leader>v", "<C-V>", { desc = "Visual Block Mode" })
 
