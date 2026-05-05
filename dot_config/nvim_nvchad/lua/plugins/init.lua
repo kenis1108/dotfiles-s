@@ -23,7 +23,8 @@ return {
       { "nvim-lua/plenary.nvim", lazy = true },
     },
     keys = {
-      { mode = { "n", "v" }, "<leader>e", "<cmd>Yazi cwd<cr>", desc = "Open Yazi in nvim's working directory" },
+      { mode = { "n", "v" }, "<leader>E", "<cmd>Yazi cwd<cr>", desc = "Open Yazi in working directory" },
+      { mode = { "n", "v" }, "<leader>e", "<cmd>Yazi<cr>", desc = "Open Yazi in current file directory" },
     },
   },
 
