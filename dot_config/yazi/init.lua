@@ -31,10 +31,10 @@ function ensure_plugin(plugin)
 	end
 end
 
-ensure_flavor(
-	"tokyonight_night.yazi",
-	"https://raw.githubusercontent.com/folke/tokyonight.nvim/main/extras/yazi/tokyonight_night.toml"
-)
+-- ensure_flavor(
+-- 	"tokyonight_night.yazi",
+-- 	"https://raw.githubusercontent.com/folke/tokyonight.nvim/main/extras/yazi/tokyonight_night.toml"
+-- )
 
 ensure_plugin("yazi-rs/plugins:full-border")
 ensure_plugin("Rolv-Apneseth/starship")

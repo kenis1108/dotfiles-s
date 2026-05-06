@@ -6,7 +6,12 @@ if not vim.g.lazy_did_setup then
 end
 
 local map = vim.keymap.set
-local nomap = vim.keymap.del
+local function nomap(mode, key)
+  local ok, _ = pcall(vim.keymap.del, mode, key)
+  if not ok then
+    print("nomap: " .. mode .. " " .. key .. " not found")
+  end
+end
 
 -- better up/down
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
