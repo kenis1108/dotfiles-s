@@ -53,5 +53,6 @@ end
 if vim.g.vscode then
 	require("vscode").notify("Hello Neovim")
 else
-	require_dir("configs") -- 加载 lua/config/*.lua
+	-- require_dir("configs") -- 加载 lua/config/*.lua
+	require("configs")
 end
