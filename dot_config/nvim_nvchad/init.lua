@@ -1,4 +1,4 @@
-﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿﻿vim.g.base46_cache = vim.fn.stdpath "data" .. "/base46/"
+﻿vim.g.base46_cache = vim.fn.stdpath "data" .. "/base46/"
 vim.g.mapleader = " "
 
 -- bootstrap lazy and all plugins
@@ -23,6 +23,7 @@ require("lazy").setup({
   },
 
   { import = "plugins" },
+  { import = "origin_configs.configs.lazy_nvim" },
 }, lazy_config)
 
 -- load theme
@@ -32,10 +33,8 @@ dofile(vim.g.base46_cache .. "statusline")
 require "options"
 require "autocmds"
 
-require "origin_configs.options"
-require "origin_configs.autocmds"
-
 vim.schedule(function()
   require "mappings"
-  require "origin_configs.keymaps"
 end)
+
+require "origin_configs.cover"
