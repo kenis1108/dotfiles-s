@@ -9,7 +9,8 @@ local map = vim.keymap.set
 local function nomap(mode, key)
   local ok, _ = pcall(vim.keymap.del, mode, key)
   if not ok then
-    print("nomap: " .. mode .. " " .. key .. " not found")
+    local msg = "nomap: " .. mode .. " " .. key .. " not found"
+    vim.cmd("echomsg '" .. msg .. "'")
   end
 end
 

@@ -31,6 +31,7 @@ function ensure_plugin(plugin)
 	end
 end
 
+-- 更新到最新的yazi 26.5.6 后，schema不兼容了，该主题会报错
 -- ensure_flavor(
 -- 	"tokyonight_night.yazi",
 -- 	"https://raw.githubusercontent.com/folke/tokyonight.nvim/main/extras/yazi/tokyonight_night.toml"
