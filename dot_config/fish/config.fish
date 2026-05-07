@@ -54,6 +54,10 @@ if type -q glow
   glow completion fish | source
 end
 
+if type -q direnv
+  direnv hook fish | source
+end
+
 if not type -q nix
   set nix_daemon_fish_path '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.fish'
   if test -e "$nix_daemon_fish_path"
