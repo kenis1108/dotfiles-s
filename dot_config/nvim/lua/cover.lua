@@ -1,7 +1,8 @@
 local function safe_require(module)
 	local ok, mod = pcall(require, module)
 	if not ok then
-		print("Module not found: " .. module, vim.log.levels.DEBUG)
+		local msg = "Module not found: " .. module
+		vim.cmd("echomsg '" .. msg .. "'")
 		return nil
 	end
 	return mod
