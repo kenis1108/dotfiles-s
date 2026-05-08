@@ -2,7 +2,9 @@
 -- See `:help mapleader`
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
+if not vim.g.lazy_did_setup then
+  vim.g.maplocalleader = "\\"
+end
 
 vim.opt.number = true
 -- Make line numbers default
@@ -59,7 +61,7 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 
 -- display certain whitespace characters in the editor.
-vim.opt.list = true
+-- vim.opt.list = true
 
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = "split"
