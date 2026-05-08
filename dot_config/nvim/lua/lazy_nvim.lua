@@ -3,60 +3,8 @@ return {
 
   { "nvim-treesitter/nvim-treesitter", enabled = false },
 
-  {
-    "nvim-telescope/telescope.nvim",
-    enabled = false,
-    keys = {
-      { "<leader>f", "<cmd>Telescope builtin<cr>", desc = "Telescope find builtin" },
-      -- 文件查找
-      {
-        "<leader>fc",
-        function()
-          require("telescope.builtin").find_files { cwd = vim.fn.stdpath "config" }
-        end,
-        desc = "Telescope find config",
-      },
-      {
-        "<leader>fd",
-        function()
-          require("telescope.builtin").find_files {
-            cwd = require("lazy.core.config").options.root or vim.fn.stdpath "data",
-          }
-        end,
-        desc = "Telescope find data",
-      },
-      -- 内容搜索
-      {
-        "<leader>/c",
-        function()
-          require("telescope.builtin").live_grep { cwd = vim.fn.stdpath "config" }
-        end,
-        desc = "Telescope live grep config",
-      },
-      {
-        "<leader>/d",
-        function()
-          require("telescope.builtin").live_grep {
-            cwd = require("lazy.core.config").options.root or vim.fn.stdpath "data",
-          }
-        end,
-        desc = "Telescope live grep data",
-      },
-    },
-    opts = {
-      defaults = {
-        cache_picker = {
-          num_pickers = -1, -- 保留最近几个 picker；-1 = 本会话全保留
-          limit_entries = 2000, -- 每个 picker 最多缓存多少条结果
-          ignore_empty_prompt = true, -- 空 prompt 就关的不进缓存
-        },
-      },
-    },
-    config = function(_, opts)
-      require("telescope").setup(opts)
-    end,
-  },
-  
+  { "nvim-telescope/telescope.nvim", enabled = false },
+
   {
     "folke/snacks.nvim",
     lazy = false,
@@ -69,9 +17,9 @@ return {
     keys = {
       { "<leader>f", function() Snacks.picker() end, desc = "Open Snacks Picker" },
       { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Find Config File" },
-      { "<leader>fd", function() Snacks.picker.files({ cwd = vim.fn.stdpath("data") }) end, desc = "Find Config Data" },
+      { "<leader>fd", function() Snacks.picker.files({ cwd = require("lazy.core.config").options.root or vim.fn.stdpath("data") }) end, desc = "Find Plugins Data" },
       { "<leader>/c", function() Snacks.picker.grep({ cwd = vim.fn.stdpath("config") }) end, desc = "Grep Config File" },
-      { "<leader>/d", function() Snacks.picker.grep({ cwd = vim.fn.stdpath("data") }) end, desc = "Grep Config Data" },
+      { "<leader>/d", function() Snacks.picker.grep({ cwd = require("lazy.core.config").options.root or vim.fn.stdpath("data") }) end, desc = "Grep Plugins Data" },
     }
   },
 
@@ -148,7 +96,6 @@ return {
       vim.g.loaded_netrwPlugin = 1
     end,
   },
-
 
   {
     "folke/which-key.nvim",

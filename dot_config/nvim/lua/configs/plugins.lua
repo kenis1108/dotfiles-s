@@ -39,21 +39,26 @@ require('blink.cmp').setup({
 -- nvim-lspconfig 是一些neovim官方预设的lsp配置文件，可以直接vim.lsp.enable('$lsp_name')。
 -- mason.nvim 是一个安装和管理lsp、dap、linters、formatters工具的统一界面。
 -- mason-lspconfig.nvim 用于自动启用nvim-lspconfig里有的且mason已安装的lsp。
--- mason-tool-installer.nvim 用于在启动时自动安装和更新mason里各种工具。
-vim.pack.add({ gh('neovim/nvim-lspconfig'), gh('mason-org/mason.nvim'), gh('mason-org/mason-lspconfig.nvim'), gh('WhoIsSethDaniel/mason-tool-installer.nvim') })
-map("n", "<leader>m", "<cmd>Mason<cr>", { desc = "Mason" })
-require('mason').setup()
-require("mason-lspconfig").setup()
+vim.pack.add({ gh('neovim/nvim-lspconfig'), gh('mason-org/mason.nvim'), gh('mason-org/mason-lspconfig.nvim') })
 local is_termux = vim.env.TERMUX_VERSION ~= nil
-local ensure_installed = {}
+local ensure_installed = {
+  "stylua",
+}
 if not is_termux then
   table.insert(ensure_installed, 'lua-language-server')
-else
-  vim.lsp.enable('lua_ls')
 end
-require('mason-tool-installer').setup({
-  ensure_installed = ensure_installed
-})
+require('mason').setup()
+require("mason-lspconfig").setup()
+local mr = require "mason-registry"
+-- 自动安装非 LSP 工具（Formatter、Linter、DAP 等）
+mr.refresh(function()
+  for _, tool in ipairs(ensure_installed) do
+    local p = mr.get_package(tool)
+    if not p:is_installed() then
+      p:install()
+    end
+  end
+end)
 
 -- -------- others --------
 vim.pack.add({ gh('nvim-mini/mini.pairs') })
@@ -109,4 +114,8 @@ require('snacks').setup({
   scroll = { enable = true }
 })
 map("n","<leader>f", function() Snacks.picker() end, { desc = "Open Snacks Picker" })
+map("n", "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, { desc = "Find Config File" })
+map("n", "<leader>fd", function() Snacks.picker.files({ cwd = require("lazy.core.config").options.root or vim.fn.stdpath("data") }) end, { desc = "Find Plugins Data" })
+map("n", "<leader>/c", function() Snacks.picker.grep({ cwd = vim.fn.stdpath("config") }) end, { desc = "Grep Config File" })
+map("n", "<leader>/d", function() Snacks.picker.grep({ cwd = require("lazy.core.config").options.root or vim.fn.stdpath("data") }) end, { desc = "Grep Plugins Data" })
 

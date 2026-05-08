@@ -2,17 +2,16 @@
 .config/rofi
 .github
 .vscode
-.zzsz
+bootstrap.sh
 chezmoi.toml
 README.md
 
 # 只有windows下才使用的文件
 {{- if ne .chezmoi.os "windows" }}
-Documents
 .config/PowerShell
 .config/yasb
 .local/bin/*.ps1
-.glzr
+
 scoop
 .wslconfig
 {{- end }}
