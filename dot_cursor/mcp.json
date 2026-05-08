@@ -17,9 +17,6 @@
     "figma-desktop": {
       "url": "http://127.0.0.1:3845/mcp"
     },
-    "feishu-mcp": {
-      "url": "https://open.feishu.cn/mcp/stream/mcp_xxx"
-    },
     "shopify-dev-mcp": {
       "command": "npx",
       "args": ["-y", "@shopify/dev-mcp@latest"]
