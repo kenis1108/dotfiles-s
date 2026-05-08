@@ -11,11 +11,6 @@
       "url": "http://127.0.0.1:3845/mcp",
       "enabled": false
     },
-    "feishu-mcp": {
-      "type": "remote",
-      "url": "https://open.feishu.cn/mcp/stream/mcp_xxx",
-      "enabled": false
-    },
     "shopify-dev-mcp": {
       "type": "local",
       "command": ["npx", "-y", "@shopify/dev-mcp@latest"],
