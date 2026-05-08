@@ -61,7 +61,7 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 
 -- display certain whitespace characters in the editor.
-vim.opt.list = true
+-- vim.opt.list = true
 
 -- Preview substitutions live, as you type!
 vim.opt.inccommand = "split"

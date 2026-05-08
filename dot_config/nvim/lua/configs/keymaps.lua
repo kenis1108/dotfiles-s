@@ -1,10 +1,5 @@
 local DEBUG = true
 
-vim.g.mapleader = " "
-if not vim.g.lazy_did_setup then
-  vim.g.maplocalleader = "\\"
-end
-
 local map = vim.keymap.set
 local function nomap(mode, key)
   local ok, _ = pcall(vim.keymap.del, mode, key)
@@ -64,48 +59,31 @@ map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 -- file manager
 -- map("n", "<leader>e", "<cmd>Ve<CR>", { desc = "Open Netrw" })
 -- map("v", "<leader>e", "<cmd>Ve<CR>", { desc = "Open Netrw" })
--- map("n", "<leader>e", "<cmd>Yazi cwd<cr>", { desc = "Open Yazi in working directory" })
--- map("v", "<leader>e", "<cmd>Yazi cwd<cr>", { desc = "Open Yazi in working directory" })
-
--- telescope
-map("n", "<leader>fb", "<cmd>Telescope builtin<cr>", { desc = "telescope find builtin" })
-map("n", "<leader>fc", function()
-	require("telescope.builtin").find_files({ cwd = vim.fn.stdpath("config") })
-end, { desc = "telescope find config" })
-map("n", "<leader>fd", function()
-	require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root or vim.fn.stdpath('data') })
-end, { desc = "telescope find data" })
-map("n", "<leader>/c", function()
-	require("telescope.builtin").live_grep({ cwd = vim.fn.stdpath("config") })
-end, { desc = "telescope live grep config" })
-map("n", "<leader>/d", function()
-	require("telescope.builtin").live_grep({ cwd = require("lazy.core.config").options.root or vim.fn.stdpath('data') })
-end, { desc = "telescope live grep data" })
 
 -- 使用 <leader>v 触发可视块模式
 map({ "n", "v" }, "<leader>v", "<C-V>", { desc = "Visual Block Mode" })
 
 function _G.toggle_background()
-	local normal_hl = vim.api.nvim_get_hl(0, { name = "Normal" })
+  local normal_hl = vim.api.nvim_get_hl(0, { name = "Normal" })
 
-	if normal_hl.bg and normal_hl.bg == 0x222436 then
-		vim.api.nvim_set_hl(0, "Normal", {
-			bg = nil,
-			ctermbg = nil,
-		})
-		vim.api.nvim_set_hl(0, "SignColumn", {
-			bg = nil,
-		})
-	else
-		vim.api.nvim_set_hl(0, "Normal", {
-			fg = 0xc8d3f5,
-			bg = 0x222436,
-		})
-		vim.api.nvim_set_hl(0, "SignColumn", {
-			fg = 0x3b4261,
-			bg = 0x222436,
-		})
-	end
+  if normal_hl.bg and normal_hl.bg == 0x222436 then
+    vim.api.nvim_set_hl(0, "Normal", {
+      bg = nil,
+      ctermbg = nil,
+    })
+    vim.api.nvim_set_hl(0, "SignColumn", {
+      bg = nil,
+    })
+  else
+    vim.api.nvim_set_hl(0, "Normal", {
+      fg = 0xc8d3f5,
+      bg = 0x222436,
+    })
+    vim.api.nvim_set_hl(0, "SignColumn", {
+      fg = 0x3b4261,
+      bg = 0x222436,
+    })
+  end
 end
 -- toggle background
 map("n", "<leader>bg", "<cmd>lua toggle_background()<CR>", { desc = "Toggle Background" })
@@ -115,90 +93,94 @@ map("i", "jk", "<ESC>")
 map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
 
 map("n", "<leader>pd", function()
-	local nap = vim.iter(vim.pack.get())
-		:filter(function(x)
-			return not x.active
-		end)
-		:map(function(x)
-			return x.spec.name
-		end)
-		:totable()
-	vim.pack.del(nap)
+  local nap = vim
+    .iter(vim.pack.get())
+    :filter(function(x)
+      return not x.active
+    end)
+    :map(function(x)
+      return x.spec.name
+    end)
+    :totable()
+  vim.pack.del(nap)
 end, { desc = "Del Non-Active Plugins From Disk" })
 
 -- Execute Lua: 用模式参数区分「行 / 选区」
 local function lua_exec(mode)
-	local code, name
-	if mode == "v" then
-		local m = vim.fn.visualmode()
-		local a = vim.fn.getpos("'<")
-		local b = vim.fn.getpos("'>")
+  local code, name
+  if mode == "v" then
+    local m = vim.fn.visualmode()
+    local a = vim.fn.getpos "'<"
+    local b = vim.fn.getpos "'>"
 
-		if m == "V" then
-			code = table.concat(vim.api.nvim_buf_get_lines(0, a[2] - 1, b[2], false), "\n")
-		else
-			local end_row = b[2] - 1
-			local end_line = vim.api.nvim_buf_get_lines(0, end_row, end_row + 1, false)[1] or ""
-			local end_col = b[3]
-			if end_col >= vim.v.maxcol then
-				end_col = #end_line
-			elseif vim.o.selection == "exclusive" then
-				end_col = end_col - 1
-			end
-			end_col = math.min(end_col, #end_line)
-			code =
-				table.concat(vim.api.nvim_buf_get_text(0, a[2] - 1, math.max(0, a[3] - 1), end_row, end_col, {}), "\n")
-		end
-		name = "@visual"
-	else
-		code = vim.api.nvim_get_current_line()
-		name = "@cursor-line"
-	end
+    if m == "V" then
+      code = table.concat(vim.api.nvim_buf_get_lines(0, a[2] - 1, b[2], false), "\n")
+    else
+      local end_row = b[2] - 1
+      local end_line = vim.api.nvim_buf_get_lines(0, end_row, end_row + 1, false)[1] or ""
+      local end_col = b[3]
+      if end_col >= vim.v.maxcol then
+        end_col = #end_line
+      elseif vim.o.selection == "exclusive" then
+        end_col = end_col - 1
+      end
+      end_col = math.min(end_col, #end_line)
+      code = table.concat(vim.api.nvim_buf_get_text(0, a[2] - 1, math.max(0, a[3] - 1), end_row, end_col, {}), "\n")
+    end
+    name = "@visual"
+  else
+    code = vim.api.nvim_get_current_line()
+    name = "@cursor-line"
+  end
 
-	-- DEBUG: 先把捕获到的内容亮出来（确认无误后可删）
-	if DEBUG then
-		vim.notify(
-			("[lua_exec] mode=%s vmode=%s bytes=%d\n%s"):format(
-				mode,
-				vim.fn.visualmode(),
-				#(code or ""),
-				(code or ""):sub(1, 300)
-			),
-			vim.log.levels.INFO
-		)
-	end
+  -- DEBUG: 先把捕获到的内容亮出来（确认无误后可删）
+  if DEBUG then
+    vim.notify(
+      ("[lua_exec] mode=%s vmode=%s bytes=%d\n%s"):format(
+        mode,
+        vim.fn.visualmode(),
+        #(code or ""),
+        (code or ""):sub(1, 300)
+      ),
+      vim.log.levels.INFO
+    )
+  end
 
-	if not code or code:match("^%s*$") then
-		return
-	end
+  if not code or code:match "^%s*$" then
+    return
+  end
 
-	local chunk, err = load(code, name)
-	if not chunk then
-		local chunk2 = load("return " .. code, name)
-		if chunk2 then
-			chunk = chunk2
-		else
-			vim.notify(("%s\n--- code (%d bytes) ---\n%s"):format(err, #code, code), vim.log.levels.ERROR)
-			return
-		end
-	end
+  local chunk, err = load(code, name)
+  if not chunk then
+    local chunk2 = load("return " .. code, name)
+    if chunk2 then
+      chunk = chunk2
+    else
+      vim.notify(("%s\n--- code (%d bytes) ---\n%s"):format(err, #code, code), vim.log.levels.ERROR)
+      return
+    end
+  end
 
-	local ok, res = pcall(chunk)
-	if not ok then
-		vim.notify(tostring(res), vim.log.levels.ERROR)
-	elseif res ~= nil then
-		vim.notify(vim.inspect(res), vim.log.levels.INFO)
-	end
+  local ok, res = pcall(chunk)
+  if not ok then
+    vim.notify(tostring(res), vim.log.levels.ERROR)
+  elseif res ~= nil then
+    vim.notify(vim.inspect(res), vim.log.levels.INFO)
+  end
 end
 
 _G.run_current_line = function()
-	lua_exec("n")
+  lua_exec "n"
 end
 _G.run_visual_selection = function()
-	lua_exec("v")
+  lua_exec "v"
 end
 
 map("n", "<LocalLeader>r", _G.run_current_line, { desc = "Execute current line as Nvim Lua" })
 map("x", "<LocalLeader>r", _G.run_visual_selection, { desc = "Execute selection as Nvim Lua" })
 
-nomap("n","<leader>fa")
+if vim.env.NVIM_APPNAME then
+  if vim.env.NVIM_APPNAME:find "nvchad" ~= nil then
+    nomap("n", "<leader>fa")
+  end
+end
