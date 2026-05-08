@@ -1,11 +1,26 @@
-local DEBUG = true
-
 local map = vim.keymap.set
 local function nomap(mode, key)
   local ok, _ = pcall(vim.keymap.del, mode, key)
   if not ok then
     local msg = "nomap: " .. mode .. " " .. key .. " not found"
     vim.cmd("echomsg '" .. msg .. "'")
+  end
+end
+
+if vim.env.NVIM_APPNAME then
+  if vim.env.NVIM_APPNAME:find "nvchad" ~= nil then
+    nomap("n", "<C-c>")
+    nomap("n", "<leader>fa")
+    nomap("n", "<leader>fb")
+    nomap("n", "<leader>ff")
+    nomap("n", "<leader>fh")
+    nomap("n", "<leader>fo")
+    nomap("n", "<leader>fw")
+    nomap("n", "<leader>fz")
+  end
+  if vim.env.NVIM_APPNAME:find "lazyvim" ~= nil then
+    nomap("n", "<leader>fe")
+    nomap("n", "<leader>fE")
   end
 end
 
@@ -57,8 +72,10 @@ map("n", "<leader>-", "<C-W>s", { desc = "Split Window Below", remap = true })
 map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 
 -- file manager
--- map("n", "<leader>e", "<cmd>Ve<CR>", { desc = "Open Netrw" })
--- map("v", "<leader>e", "<cmd>Ve<CR>", { desc = "Open Netrw" })
+if not vim.env.NVIM_APPNAME then
+  map("n", "<leader>e", "<cmd>Ve<CR>", { desc = "Open Netrw" })
+  map("v", "<leader>e", "<cmd>Ve<CR>", { desc = "Open Netrw" })
+end
 
 -- 使用 <leader>v 触发可视块模式
 map({ "n", "v" }, "<leader>v", "<C-V>", { desc = "Visual Block Mode" })
@@ -105,82 +122,6 @@ map("n", "<leader>pd", function()
   vim.pack.del(nap)
 end, { desc = "Del Non-Active Plugins From Disk" })
 
--- Execute Lua: 用模式参数区分「行 / 选区」
-local function lua_exec(mode)
-  local code, name
-  if mode == "v" then
-    local m = vim.fn.visualmode()
-    local a = vim.fn.getpos "'<"
-    local b = vim.fn.getpos "'>"
-
-    if m == "V" then
-      code = table.concat(vim.api.nvim_buf_get_lines(0, a[2] - 1, b[2], false), "\n")
-    else
-      local end_row = b[2] - 1
-      local end_line = vim.api.nvim_buf_get_lines(0, end_row, end_row + 1, false)[1] or ""
-      local end_col = b[3]
-      if end_col >= vim.v.maxcol then
-        end_col = #end_line
-      elseif vim.o.selection == "exclusive" then
-        end_col = end_col - 1
-      end
-      end_col = math.min(end_col, #end_line)
-      code = table.concat(vim.api.nvim_buf_get_text(0, a[2] - 1, math.max(0, a[3] - 1), end_row, end_col, {}), "\n")
-    end
-    name = "@visual"
-  else
-    code = vim.api.nvim_get_current_line()
-    name = "@cursor-line"
-  end
-
-  -- DEBUG: 先把捕获到的内容亮出来（确认无误后可删）
-  if DEBUG then
-    vim.notify(
-      ("[lua_exec] mode=%s vmode=%s bytes=%d\n%s"):format(
-        mode,
-        vim.fn.visualmode(),
-        #(code or ""),
-        (code or ""):sub(1, 300)
-      ),
-      vim.log.levels.INFO
-    )
-  end
-
-  if not code or code:match "^%s*$" then
-    return
-  end
-
-  local chunk, err = load(code, name)
-  if not chunk then
-    local chunk2 = load("return " .. code, name)
-    if chunk2 then
-      chunk = chunk2
-    else
-      vim.notify(("%s\n--- code (%d bytes) ---\n%s"):format(err, #code, code), vim.log.levels.ERROR)
-      return
-    end
-  end
-
-  local ok, res = pcall(chunk)
-  if not ok then
-    vim.notify(tostring(res), vim.log.levels.ERROR)
-  elseif res ~= nil then
-    vim.notify(vim.inspect(res), vim.log.levels.INFO)
-  end
-end
-
-_G.run_current_line = function()
-  lua_exec "n"
-end
-_G.run_visual_selection = function()
-  lua_exec "v"
-end
-
-map("n", "<LocalLeader>r", _G.run_current_line, { desc = "Execute current line as Nvim Lua" })
-map("x", "<LocalLeader>r", _G.run_visual_selection, { desc = "Execute selection as Nvim Lua" })
-
-if vim.env.NVIM_APPNAME then
-  if vim.env.NVIM_APPNAME:find "nvchad" ~= nil then
-    nomap("n", "<leader>fa")
-  end
-end
+-- lua
+map("n", "<localleader>r", function() require("snacks.debug").run() end, { desc = "Run Lua" })
+map("x", "<localleader>r", function() require("snacks.debug").run() end, { desc = "Run Lua" })
