@@ -1,3 +1,8 @@
+vim.g.mapleader = " "
+if not vim.g.lazy_did_setup then
+  vim.g.maplocalleader = "\\"
+end
+
 local map = vim.keymap.set
 
 -- better up/down

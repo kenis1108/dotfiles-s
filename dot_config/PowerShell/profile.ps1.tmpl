@@ -1,0 +1,203 @@
+#----------
+# Modules
+#---------
+# 判断当前PowerShell版本
+if ($PSVersionTable.PSVersion.Major -lt 7) {
+  # PowerShell 5.x
+  if (Test-Path "C:\Program Files\WindowsPowerShell\Modules\PSReadLine") {
+    Write-Host "请先关闭所有powershell进程 然后在文件资源管理器里面 删除 'C:\Program Files\WindowsPowerShell\Modules\PSReadLine'" -ForegroundColor Yellow
+    return
+  }
+  if (-not (Get-Module -ListAvailable -Name PSReadLine)) {
+    if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
+      Write-Host "Scoop is not installed. Please install Scoop first." -ForegroundColor Red
+    } else {
+      Write-Host "Installing PSReadLine module using Scoop..." -ForegroundColor Yellow
+      scoop install psreadline
+    }
+  }
+  Import-Module PSReadLine
+	Set-PSReadLineOption -PredictionSource History
+}
+else {
+	# PowerShell 7.x
+	# PSReadLine 在 PowerShell 7 中默认启用，无需额外导入
+}
+
+# 导入 Terminal-Icons 模块
+if (-not (Get-Module -ListAvailable -Name Terminal-Icons)) {
+  if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
+    Write-Host "Scoop is not installed. Please install Scoop first." -ForegroundColor Red
+  } else {
+    Write-Host "Installing Terminal-Icons module using Scoop..." -ForegroundColor Yellow
+    scoop install terminal-icons
+  }
+}
+Import-Module Terminal-Icons
+
+# 导入 gsudoModule 模块
+if (-not (Get-Module -ListAvailable -Name gsudoModule)) {
+  if (-not (Get-Command scoop -ErrorAction SilentlyContinue)) {
+    Write-Host "Scoop is not installed. Please install Scoop first." -ForegroundColor Red
+  } else {
+    Write-Host "Installing gsudoModule module using Scoop..." -ForegroundColor Yellow
+    scoop install gsudo
+  }
+}
+Import-Module gsudoModule
+
+# scoop Tab补全 via "scoop install scoop-completion"
+# Import-Module "$($(Get-Item $(Get-Command scoop.ps1).Path).Directory.Parent.FullName)\modules\scoop-completion"
+
+# PSFzF
+# Import-Module PSFzf
+# 启用PSFzF的tab补全
+# Set-PsFzfOption -TabExpansion
+# 启用fe搜索并打开文件进行编辑
+# Set-PsFzfOption -EnableAliasFuzzyEdit
+
+# chezmoi
+Import-Module "$($(Get-Item $(Get-Command scoop.ps1).Path).Directory.Parent.FullName)\apps\chezmoi\current\completions\chezmoi.ps1"
+
+#-------
+# Keys
+#-------
+# 设置 Ctrl+d 为退出 PowerShell
+Set-PSReadlineKeyHandler -Key "Ctrl+d" -Function ViExit
+# 设置 Ctrl+u 为清除从输入开始到游标的文本。 清除的文本放置在剪贴环中
+Set-PSReadlineKeyHandler -Key "Ctrl+u" -Function BackwardKillInput 
+# 设置 Ctrl+a 为移动光标到行首
+Set-PSReadlineKeyHandler -Key "Ctrl+a" -Function BeginningOfLine 
+# 设置 Ctrl+e 为移动光标到行尾
+Set-PSReadlineKeyHandler -Key "Ctrl+e" -Function EndOfLine 
+
+# Advanced Autocompletion for arrow keys
+Set-PSReadlineKeyHandler -Key UpArrow -Function HistorySearchBackward
+Set-PSReadlineKeyHandler -Key DownArrow -Function HistorySearchForward
+
+# PSFzF覆盖默认快捷键
+# replace 'Ctrl+t' and 'Ctrl+r' with your preferred bindings:
+# Set-PsFzfOption -PSReadlineChordProvider 'Ctrl+t' -PSReadlineChordReverseHistory 'Ctrl+r'
+# Set-PSReadLineKeyHandler -Key Tab -ScriptBlock { Invoke-FzfTabCompletion }
+
+#------------------------
+# Environment Variables
+#------------------------
+# 定义要设置的环境变量名称和值
+$FZF_DEFAULT_OPTS_VALUE = "--reverse --border --height 50% --preview='bat {}'"
+$FZF_DEFAULT_COMMAND_VALUE = "powershell.exe -NoLogo -NoProfile -Noninteractive -Command ""Get-ChildItem -File -Recurse -Name"" "
+
+# 修改fzf默认参数
+# [System.Environment]::SetEnvironmentVariable('FZF_DEFAULT_OPTS', $FZF_DEFAULT_OPTS_VALUE, [System.EnvironmentVariableTarget]::User)
+# 解决powershell下fzf不能搜索隐藏文件
+# [System.Environment]::SetEnvironmentVariable('FZF_DEFAULT_COMMAND', $FZF_DEFAULT_COMMAND_VALUE, [System.EnvironmentVariableTarget]::User)
+
+# powershell默认编码是GBK，改成UTF-8
+# [console]::OutputEncoding = [System.Text.Encoding]::UTF8
+
+$env:EDITOR = "nvim"
+[Environment]::SetEnvironmentVariable("EDITOR", "nvim", "User")
+$env:VISUAL = "nvim"
+[Environment]::SetEnvironmentVariable("VISUAL", "nvim", "User")
+$env:YAZI_CONFIG_HOME = "$env:USERPROFILE\.config\yazi"
+[Environment]::SetEnvironmentVariable("YAZI_CONFIG_HOME", $env:YAZI_CONFIG_HOME, "User")
+{{- if eq .chezmoi.os "windows" }}
+# $env:VIMINIT="source $env:USERPROFILE\.config\vim\vimrc" # 自定义Vim配置文件路径, 会影响到nvim，使用nvim的时候注释掉
+# 也可以使用 vim -u vimrc_path (好像windows下不是很好用)
+
+# 自定义Neovim配置文件路径
+# $env:XDG_CONFIG_HOME="$env:USERPROFILE\.config" # 只有powershell中的nvim会生效
+[Environment]::SetEnvironmentVariable("XDG_CONFIG_HOME", "$($env:USERPROFILE)\.config", "User") # 便于让其他不是powershell的程序(比如vscode使用neovim插件)使用，跟手动在“编辑系统环境变量”程序中设置的环境变量一致
+{{- end }}
+
+# $env:PATH = "$HOME/.local/bin;$env:PATH"
+# $oldPath = [System.Environment]::GetEnvironmentVariable("Path", "User")
+# $newPath = "$HOME`\.local`\bin;$oldPath"
+# [System.Environment]::SetEnvironmentVariable("Path", $newPath, "User")
+
+# 获取当前用户PATH值
+$currentPath = [Environment]::GetEnvironmentVariable("PATH", "User")
+
+# 将Git自带的工具添加到环境变量中
+# Git的bin目录路径（根据实际安装位置调整）
+$gitUsrBinPath = "$($(Get-Item $(Get-Command scoop.ps1).Path).Directory.Parent.FullName)\apps\git\current\usr\bin"
+
+# 检查是否已包含该路径
+if ($currentPath -notlike "*$gitUsrBinPath*") {
+    # 添加Git bin目录到PATH
+    $newPath = $currentPath + ";" + $gitUsrBinPath
+    [Environment]::SetEnvironmentVariable("PATH", $newPath, "User")
+}
+
+# 将autohotkey安装目录添加到环境变量中
+# Autohotkey的安装目录路径（根据实际安装位置调整）
+$ahkPath = "$($(Get-Item $(Get-Command scoop.ps1).Path).Directory.Parent.FullName)\apps\autohotkey-portable\current"
+
+# 检查是否已包含该路径
+if ($currentPath -notlike "*$ahkPath*") {
+    # 添加Autohotkey目录到PATH
+    $newPath = $currentPath + ";" + $ahkPath
+    [Environment]::SetEnvironmentVariable("PATH", $newPath, "User")
+}
+
+. {{ .chezmoi.homeDir }}/.config/PowerShell/function.ps1
+
+# yazi
+function y {
+    $tmp = (New-TemporaryFile).FullName
+    yazi $args --cwd-file="$tmp"
+    $cwd = Get-Content -Path $tmp -Encoding UTF8
+    if (-not [String]::IsNullOrEmpty($cwd) -and $cwd -ne $PWD.Path) {
+        Set-Location -LiteralPath (Resolve-Path -LiteralPath $cwd).Path
+    }
+    Remove-Item -Path $tmp
+}
+
+# jujutsu
+if (Get-Command jj -ErrorAction SilentlyContinue) {
+  jj util completion power-shell | Out-String | Invoke-Expression
+}
+
+# starship
+if (Get-Command starship -ErrorAction SilentlyContinue) {
+  Invoke-Expression (&starship init powershell)
+}
+
+# fnm
+if (Get-Command fnm -ErrorAction SilentlyContinue) {
+  fnm env --use-on-cd --shell powershell | Out-String | Invoke-Expression
+  fnm completions --shell powershell | Out-String | Invoke-Expression
+}
+
+# uv
+if (Get-Command uv -ErrorAction SilentlyContinue) {
+  (& uv generate-shell-completion powershell) | Out-String | Invoke-Expression
+  (& uvx --generate-shell-completion powershell) | Out-String | Invoke-Expression
+}
+
+# zoxide
+if (Get-Command zoxide -ErrorAction SilentlyContinue) {
+  Invoke-Expression (& { (zoxide init powershell | Out-String) })
+}
+
+# OSC 7 on Windows with powershell (with starship)
+# wezterm 集成 powershell 打开新tab/pane自动集成上一个powershell的目录路径
+if (Get-Command wezterm -ErrorAction SilentlyContinue) {
+  $prompt = ""
+  function Invoke-Starship-PreCommand {
+    $current_location = $executionContext.SessionState.Path.CurrentLocation
+    if ($current_location.Provider.Name -eq "FileSystem") {
+      $ansi_escape = [char]27
+      $provider_path = $current_location.ProviderPath -replace "\\", "/"
+      $prompt = "$ansi_escape]7;file://${env:COMPUTERNAME}/${provider_path}$ansi_escape\"
+    }
+    $host.ui.Write($prompt)
+  }
+}
+
+# long
+if (Get-Command long -ErrorAction SilentlyContinue) {
+  long --shell powershell  --no_output | Out-String | Invoke-Expression
+}
+
+# vim: set ft=ps1 :

@@ -4,8 +4,6 @@ local gh = function(x) return 'https://github.com/' .. x end
 -- -------- theme --------
 vim.pack.add({ gh('folke/tokyonight.nvim'), gh('nvim-mini/mini.icons') })
 vim.cmd('colorscheme tokyonight')
-vim.cmd('hi Normal ctermbg=none guibg=none')
-vim.cmd('hi SignColumn ctermbg=none guibg=none')
 
 -- -------- file manager --------
 vim.pack.add({ gh('mikavilpas/yazi.nvim'), gh('nvim-lua/plenary.nvim') })

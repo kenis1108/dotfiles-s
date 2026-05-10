@@ -27,8 +27,10 @@
       - [homebrew](#homebrew)
       - [VSCode](#vscode)
       - [kitty](#kitty)
+      - [rime](#rime)
     - [Windows](#windows)
       - [PowerShell](#powershell)
+      - [Yazi](#yazi)
 
 ## 如何使用
 
@@ -204,10 +206,10 @@ brew bundle dump --global --force --describe
 
 ```bash
 mv ~/Library/Application\ Support/Code/User/settings.json ~/Library/Application\ Support/Code/User/settings.json.bak
-ln -s ~/.config/vscode/settings.json ~/Library/Application\ Support/Code/User/settings.json
+ln -sf ~/.config/vscode/settings.json ~/Library/Application\ Support/Code/User/settings.json
 
 mv ~/Library/Application\ Support/Code/User/mcp.json ~/Library/Application\ Support/Code/User/mcp.json.bak
-ln -s ~/.config/vscode/mcp.json ~/Library/Application\ Support/Code/User/mcp.json
+ln -sf ~/.config/vscode/mcp.json ~/Library/Application\ Support/Code/User/mcp.json
 ```
 
 + extensions
@@ -225,14 +227,14 @@ cat extensions.txt | xargs -n 1 code --install-extension
 #### kitty
 
 ```bash
-ln -s ./tokyo-night.conf ./theme.conf
+ln -sf ./tokyo-night.conf ./theme.conf
 ```
 
 #### rime
 
 ```bash
-ln -s $HOME/.config/rime/default.custom.yaml ./default.custom.yaml
-ln -s $HOME/.config/rime/squirrel.custom.yaml ./squirrel.custom.yaml
+ln -sf $HOME/.config/rime/default.custom.yaml ./default.custom.yaml
+ln -sf $HOME/.config/rime/squirrel.custom.yaml ./squirrel.custom.yaml
 ```
 
 ### Windows
@@ -242,9 +244,16 @@ ln -s $HOME/.config/rime/squirrel.custom.yaml ./squirrel.custom.yaml
 ```pwsh
 # PowerShell 7
 New-Item -ItemType Directory -Force $env:USERPROFILE\Documents\PowerShell
-new-Item -ItemType SymbolicLink -Path $env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1 -Target $env:USERPROFILE\.config\PowerShell\profile.ps1
+New-Item -ItemType SymbolicLink -Path $env:USERPROFILE\Documents\PowerShell\Microsoft.PowerShell_profile.ps1 -Target $env:USERPROFILE\.config\PowerShell\profile.ps1
 
 # PowerShell 5
 New-Item -ItemType Directory -Force $env:USERPROFILE\Documents\WindowsPowerShell
-new-Item -ItemType SymbolicLink -Path $env:USERPROFILE\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1 -Target $env:USERPROFILE\.config\PowerShell\profile.ps1
+New-Item -ItemType SymbolicLink -Path $env:USERPROFILE\Documents\WindowsPowerShell\Microsoft.PowerShell_profile.ps1 -Target $env:USERPROFILE\.config\PowerShell\profile.ps1
+```
+
+#### Yazi
+
+```pwsh
+$env:YAZI_CONFIG_HOME = "$env:USERPROFILE\.config\yazi"
+[Environment]::SetEnvironmentVariable("YAZI_CONFIG_HOME", $env:YAZI_CONFIG_HOME, "User")
 ```

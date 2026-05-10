@@ -1,4 +1,4 @@
-﻿﻿local function augroup(name)
+﻿local function augroup(name)
 	return vim.api.nvim_create_augroup("kenvim_" .. name, { clear = true })
 end
 

@@ -13,7 +13,10 @@ function Linemode:size_and_mtime()
 end
 
 function ensure_flavor(flavor_name, download_url)
-	local home = os.getenv("HOME")
+	local home = os.getenv("HOME") or os.getenv("USERPROFILE")
+	if not home then
+		return
+	end
 	local flavor_path = home .. "/.config/yazi/flavors/" .. flavor_name .. "/flavor.toml"
 
 	if not os.execute([[test -f "]] .. flavor_path .. [["]]) then
@@ -27,7 +30,11 @@ end
 function ensure_plugin(plugin)
 	local ok = pcall(require, plugin)
 	if not ok then
-		os.execute("ya pkg add " .. plugin .. " >/dev/null 2>&1")
+    if ya.target_family() == "windows" then
+      os.execute("ya pkg add " .. plugin .. " 2>$null")
+    else
+		  os.execute("ya pkg add " .. plugin .. " >/dev/null 2>&1")
+    end
 	end
 end
 

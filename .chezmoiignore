@@ -47,7 +47,6 @@ scoop
 .config/wpaperd
 .config/zellij
 .config/zsh
-.config/yazi
 .local
 .urxvt
 .Xmodmap
