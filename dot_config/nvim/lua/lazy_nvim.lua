@@ -3,7 +3,26 @@ return {
 
   { "nvim-treesitter/nvim-treesitter", enabled = false },
 
-  { "nvim-telescope/telescope.nvim", enabled = false },
+  { "nvim-telescope/telescope.nvim", enabled = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME:find "nvchad" ~= nil },
+
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters_by_ft = { lua = { "stylua" } },
+    },
+    keys = function ()
+      return {
+        {
+          mode = { "n", "x" },
+          "<leader>=",
+          function()
+            require("conform").format({ lsp_fallback = true })
+          end,
+          desc = "general format file",
+        }
+      }
+    end
+  },
 
   {
     "folke/snacks.nvim",

@@ -1,28 +1,4 @@
 local map = vim.keymap.set
-local function nomap(mode, key)
-  local ok, _ = pcall(vim.keymap.del, mode, key)
-  if not ok then
-    local msg = "nomap: " .. mode .. " " .. key .. " not found"
-    vim.cmd("echomsg '" .. msg .. "'")
-  end
-end
-
-if vim.env.NVIM_APPNAME then
-  if vim.env.NVIM_APPNAME:find "nvchad" ~= nil then
-    nomap("n", "<C-c>")
-    nomap("n", "<leader>fa")
-    nomap("n", "<leader>fb")
-    nomap("n", "<leader>ff")
-    nomap("n", "<leader>fh")
-    nomap("n", "<leader>fo")
-    nomap("n", "<leader>fw")
-    nomap("n", "<leader>fz")
-  end
-  if vim.env.NVIM_APPNAME:find "lazyvim" ~= nil then
-    nomap("n", "<leader>fe")
-    nomap("n", "<leader>fE")
-  end
-end
 
 -- better up/down
 map({ "n", "x" }, "j", "v:count == 0 ? 'gj' : 'j'", { desc = "Down", expr = true, silent = true })
@@ -73,34 +49,73 @@ map("n", "<leader>|", "<C-W>v", { desc = "Split Window Right", remap = true })
 
 -- file manager
 if not vim.env.NVIM_APPNAME then
-  map("n", "<leader>e", "<cmd>Ve<CR>", { desc = "Open Netrw" })
-  map("v", "<leader>e", "<cmd>Ve<CR>", { desc = "Open Netrw" })
+	map({ "n", "v" }, "<leader>e", "<cmd>Ve<CR>", { desc = "Open Netrw" })
 end
 
 -- 使用 <leader>v 触发可视块模式
 map({ "n", "v" }, "<leader>v", "<C-V>", { desc = "Visual Block Mode" })
 
-function _G.toggle_background()
-  local normal_hl = vim.api.nvim_get_hl(0, { name = "Normal" })
+-- 支持写法：
+-- "Normal"        精确匹配
+-- "StatusLine*"   以 StatusLine 开头
+-- "lualine_*"     以 lualine_ 开头
+local hlgroups_glassy = {
+	"Normal",
+	"SignColumn",
+	"StatusLine*",
+	"lualine_c_*",
+	"lualine_x_*",
+}
 
-  if normal_hl.bg and normal_hl.bg == 0x222436 then
-    vim.api.nvim_set_hl(0, "Normal", {
-      bg = nil,
-      ctermbg = nil,
-    })
-    vim.api.nvim_set_hl(0, "SignColumn", {
-      bg = nil,
-    })
-  else
-    vim.api.nvim_set_hl(0, "Normal", {
-      fg = 0xc8d3f5,
-      bg = 0x222436,
-    })
-    vim.api.nvim_set_hl(0, "SignColumn", {
-      fg = 0x3b4261,
-      bg = 0x222436,
-    })
-  end
+local hl_original = {}
+
+-- 把模糊规则展开成真实存在的 hlgroup 列表
+local function expand_patterns(patterns)
+	local all_hl = vim.api.nvim_get_hl(0, {})
+	local result = {}
+
+	for _, pat in ipairs(patterns) do
+		-- 转成 Lua 匹配模式 * → .*
+		local lua_pat = "^" .. pat:gsub("%*", ".*") .. "$"
+
+		for name in pairs(all_hl) do
+			if name:match(lua_pat) then
+				result[name] = true
+			end
+		end
+	end
+
+	local list = {}
+	for name in pairs(result) do
+		table.insert(list, name)
+	end
+	return list
+end
+
+local function save_original_hl()
+	if next(hl_original) ~= nil then
+		return
+	end
+	local hl_list = expand_patterns(hlgroups_glassy)
+	for _, name in ipairs(hl_list) do
+		hl_original[name] = vim.api.nvim_get_hl(0, { name = name, link = false })
+	end
+end
+
+function _G.toggle_background()
+	save_original_hl()
+	local current_normal = vim.api.nvim_get_hl(0, { name = "Normal", link = false })
+	local hl_list = expand_patterns(hlgroups_glassy)
+
+	if current_normal.bg then
+		for _, name in ipairs(hl_list) do
+			vim.api.nvim_set_hl(0, name, { bg = nil, ctermbg = nil })
+		end
+	else
+		for name, hl in pairs(hl_original) do
+			vim.api.nvim_set_hl(0, name, hl)
+		end
+	end
 end
 -- toggle background
 map("n", "<leader>bg", "<cmd>lua toggle_background()<CR>", { desc = "Toggle Background" })
@@ -110,18 +125,18 @@ map("i", "jk", "<ESC>")
 map("n", "<Esc>", "<cmd>noh<CR>", { desc = "general clear highlights" })
 
 map("n", "<leader>pd", function()
-  local nap = vim
-    .iter(vim.pack.get())
-    :filter(function(x)
-      return not x.active
-    end)
-    :map(function(x)
-      return x.spec.name
-    end)
-    :totable()
-  vim.pack.del(nap)
+	local nap = vim.iter(vim.pack.get())
+		:filter(function(x)
+			return not x.active
+		end)
+		:map(function(x)
+			return x.spec.name
+		end)
+		:totable()
+	vim.pack.del(nap)
 end, { desc = "Del Non-Active Plugins From Disk" })
 
 -- lua
-map("n", "<localleader>r", function() require("snacks.debug").run() end, { desc = "Run Lua" })
-map("x", "<localleader>r", function() require("snacks.debug").run() end, { desc = "Run Lua" })
+map({ "n", "x" }, "<localleader>r", function()
+	require("snacks.debug").run()
+end, { desc = "Run Lua" })
