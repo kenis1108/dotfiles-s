@@ -1,3 +1,7 @@
+if not vim.g.kenvim_plugin_enable then
+  return
+end
+
 local map = vim.keymap.set
 local gh = function(x) return 'https://github.com/' .. x end
 
@@ -57,6 +61,9 @@ mr.refresh(function()
     end
   end
 end)
+-- neovim config development
+vim.pack.add({ gh('folke/lazydev.nvim') })
+require('lazydev').setup()
 
 -- -------- others --------
 vim.pack.add({ gh('nvim-mini/mini.pairs') })
@@ -116,4 +123,3 @@ map("n", "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("co
 map("n", "<leader>fd", function() Snacks.picker.files({ cwd = require("lazy.core.config").options.root or vim.fn.stdpath("data") }) end, { desc = "Find Plugins Data" })
 map("n", "<leader>/c", function() Snacks.picker.grep({ cwd = vim.fn.stdpath("config") }) end, { desc = "Grep Config File" })
 map("n", "<leader>/d", function() Snacks.picker.grep({ cwd = require("lazy.core.config").options.root or vim.fn.stdpath("data") }) end, { desc = "Grep Plugins Data" })
-

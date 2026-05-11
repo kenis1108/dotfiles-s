@@ -113,3 +113,10 @@ end
 -- vim.opt.completeopt:append({ "menuone", "noselect", "popup" })
 
 vim.opt.autochdir = true
+
+vim.diagnostic.config({
+  virtual_lines = true, -- 开启虚拟行模式
+})
+vim.diagnostic.show()
+
+vim.g.kenvim_plugin_enable = false
