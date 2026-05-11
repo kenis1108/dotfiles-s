@@ -1,9 +1,21 @@
 return {
-  { "nvim-tree/nvim-tree.lua", enabled = false },
+	{ "nvim-tree/nvim-tree.lua", enabled = false },
 
-  { "nvim-treesitter/nvim-treesitter", enabled = false },
+	{ "nvim-treesitter/nvim-treesitter", enabled = false },
 
-  { "nvim-telescope/telescope.nvim", enabled = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME:find "nvchad" ~= nil },
+	{ "nvim-telescope/telescope.nvim", enabled = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME:find("nvchad") ~= nil },
+
+	{
+		"folke/tokyonight.nvim",
+    enabled = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME:find("lazyvim") ~= nil,
+		opts = {
+			transparent = true,
+			styles = {
+				sidebars = "transparent",
+				floats = "transparent",
+			},
+		},
+	},
 
 	{
 		"lewis6991/gitsigns.nvim",
@@ -44,13 +56,48 @@ return {
 		"folke/flash.nvim",
 		event = "VeryLazy",
 		opts = {},
-    keys = {
-      { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
-      { "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
-      { "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
-      { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
-      { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
-    },
+		keys = {
+			{
+				"s",
+				mode = { "n", "x", "o" },
+				function()
+					require("flash").jump()
+				end,
+				desc = "Flash",
+			},
+			{
+				"S",
+				mode = { "n", "x", "o" },
+				function()
+					require("flash").treesitter()
+				end,
+				desc = "Flash Treesitter",
+			},
+			{
+				"r",
+				mode = "o",
+				function()
+					require("flash").remote()
+				end,
+				desc = "Remote Flash",
+			},
+			{
+				"R",
+				mode = { "o", "x" },
+				function()
+					require("flash").treesitter_search()
+				end,
+				desc = "Treesitter Search",
+			},
+			{
+				"<c-s>",
+				mode = { "c" },
+				function()
+					require("flash").toggle()
+				end,
+				desc = "Toggle Flash Search",
+			},
+		},
 	},
 
 	{
