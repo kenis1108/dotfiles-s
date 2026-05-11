@@ -1,0 +1,130 @@
+vim9script
+# 不要使用 vim -u "~/.config/vim9/vimrc" 加载，使用 -u + vim9script 的组合会导致初始化环境不完整
+# 请根据平台使用软链接或者快捷方式的方式加载
+# Linux/macOS: ln -s ~/.config/vim9/vimrc ~/.vimrc
+# Windows: New-Item -ItemType SymbolicLink -Path "~/_vimrc" -Target "~/.config/vim9/vimrc"
+# ===============================================================================
+# Author: Kenis <kenisdsg1108@gmail.com>
+# Desc: Vim Configuration ❤ (vimrc for Unix/Linux/Windows/Mac, GUI/Console)
+# ===============================================================================
+
+&rtp = expand('~/.config/vim') .. ',' .. &rtp
+colorscheme tokyonight-night
+
+so ~/.config/vim9/configs/options.vim
+so ~/.config/vim9/configs/autocmds.vim
+so ~/.config/vim9/configs/keymaps.vim
+
+# ===============
+# Packpath 配置
+# ===============
+g:custom_packpath = expand('~/.config/vim9')
+if !isdirectory(g:custom_packpath)
+  mkdir(g:custom_packpath, 'p')
+endif
+
+&packpath = g:custom_packpath .. ',' .. &packpath  # 添加到 packpath 开头
+
+# ================
+# 插件管理配置
+# ================
+const plugins_start_dir = expand(g:custom_packpath .. '/pack/plugins/start')
+const plugins_opt_dir = expand(g:custom_packpath .. '/pack/plugins/opt')
+if !isdirectory(plugins_start_dir)
+  mkdir(plugins_start_dir, 'p')
+endif
+if !isdirectory(plugins_opt_dir)
+  mkdir(plugins_opt_dir, 'p')
+endif
+
+# ============================================================================
+# 函数名称: InstallPlugin
+# 功能描述: 通过Git命令安装Vim插件
+# 入参格式: 二维数组 [[插件名称, Git命令, 安装位置], ...]
+#            安装位置可选，默认为 'start'
+# 返回值:  无
+# ============================================================================
+def InstallPlugin(plugins: list<list<any>>)
+  # 检查Git是否安装
+  const gitCheckOutput = system('git --version 2>&1')
+  if v:shell_error != 0
+    echoerr '错误: 未检测到Git安装'
+    echoerr '请先安装Git并确保其在系统PATH中'
+    echoerr '错误信息: ' .. gitCheckOutput
+    return
+  endif
+
+  for plugin in plugins
+    # 参数验证
+    if len(plugin) < 2
+      echoerr '错误: 插件条目格式至少需要 [插件名称, Git命令]'
+      continue
+    endif
+
+    var name = plugin[0]           # 插件名称（安装后的目录名）
+    var git_cmd = plugin[1]        # 完整的Git克隆命令
+    var install_type = get(plugin, 2, 'start')  # 默认为 'start'
+
+    # 确定安装路径
+    var install_dir = install_type ==? 'opt' ? plugins_opt_dir : plugins_start_dir
+    var install_path = install_dir .. '/' .. name
+
+    # 检查插件是否已安装
+    if !isdirectory(install_path)
+      # 构建并执行Git命令
+      var cmd = git_cmd .. ' ' .. shellescape(install_path)
+      var result = system(cmd)
+
+      # 检查命令执行结果
+      if v:shell_error != 0
+        echoerr 'Failed to install plugin: ' .. name
+        echoerr 'Executed command: ' .. cmd
+        echoerr 'Error output: ' .. result
+      else
+        echomsg 'Plugin installed successfully: ' .. name .. ' (' .. install_type .. ')'
+      endif
+    else
+      echomsg 'Plugin already installed: ' .. name .. ' (' .. install_type .. ')'
+    endif
+  endfor
+enddef
+defcompile
+
+# ============================================================================
+# 函数名称: LoadPluginConfig
+# 功能描述: 加载已安装插件的配置文件
+# ============================================================================
+def LoadPluginConfig()
+  for f in glob(g:custom_packpath .. '/plugins-config/*.vim', 1, 1)
+    # 从配置文件名提取插件名
+    var plugin_name = fnamemodify(f, ':t:r')
+
+    # 检查插件是否存在（先查start目录，再查opt目录）
+    var plugin_path = plugins_start_dir .. '/' .. plugin_name
+    if !isdirectory(expand(plugin_path))
+      plugin_path = plugins_opt_dir .. '/' .. plugin_name
+    endif
+
+    if isdirectory(expand(plugin_path))
+      execute 'source' f
+      echomsg 'Loaded config for: ' .. plugin_name
+    else
+      echomsg 'Skipped missing plugin: ' .. plugin_name
+    endif
+  endfor
+enddef
+defcompile
+
+# ============================================================================
+# 插件安装列表
+# ============================================================================
+const plugin_list = [
+  # 格式: [插件名, git命令, 安装类型(可选)]
+  ['fuzzyy', 'git clone --depth 1 https://github.com/Donaldttt/fuzzyy'],  # 默认安装到 start
+  ['lsp', 'git clone --depth 1 https://github.com/yegappan/lsp', 'opt'],  # 安装到opt
+  ['vimsuggest', 'git clone --depth 1 https://github.com/girishji/vimsuggest.git', 'opt'],
+]
+
+# 执行插件安装和配置加载
+silent InstallPlugin(plugin_list)
+silent LoadPluginConfig()

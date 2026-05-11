@@ -1,0 +1,157 @@
+" vim -u "~/.config/vim8/vimrc"
+" ================
+" Startup Timing
+" ================
+let g:vim_start_time = reltime()
+
+function! LegacyShowStartupTime()
+  let elapsed = reltimefloat(reltime(g:vim_start_time)) * 1000
+  echom printf('Vim fully loaded in %.2f ms', elapsed)
+endfunction
+
+augroup StartupTime
+  autocmd!
+  autocmd VimEnter * call LegacyShowStartupTime()
+augroup END
+
+let &rtp = expand('~/.config/vim') . ',' . &rtp
+colorscheme tokyonight-night
+
+so ~/.config/vim8/configs/options.vim
+so ~/.config/vim8/configs/autocmds.vim
+so ~/.config/vim8/configs/keymaps.vim
+
+" ===============
+" packpath
+" ===============
+let g:custom_packpath = expand('~/.config/vim8')
+if !isdirectory(g:custom_packpath)
+  call mkdir(g:custom_packpath, 'p')
+endif
+
+let &packpath = g:custom_packpath . ',' . &packpath " 添加到 packpath 的开头
+
+" ================
+" plugins
+" ================
+let g:plugins_start_dir = expand(g:custom_packpath . '/pack/plugins/start')
+let g:plugins_opt_dir = expand(g:custom_packpath . '/pack/plugins/opt')
+if !isdirectory(g:plugins_start_dir)
+  call mkdir(g:plugins_start_dir, 'p')
+endif
+if !isdirectory(g:plugins_opt_dir)
+  call mkdir(g:plugins_opt_dir, 'p')
+endif
+
+" ============================================================================
+" 函数名称: LegacyInstallPlugin
+" 功能描述: 通过Git命令安装Vim插件
+" 入参格式: 二维数组 [[插件名称, Git命令, 安装位置], ...]
+"            安装位置可选，默认为 'start'
+" 返回值:  无
+" ============================================================================
+function! LegacyInstallPlugin(plugins)
+  " 检查Git是否安装
+  let git_check = system('git --version 2>&1')
+  if v:shell_error != 0
+    echohl ErrorMsg
+    echo '错误: 未检测到Git安装'
+    echo '请先安装Git并确保其在系统PATH中'
+    echo '错误信息: ' . git_check
+    echohl None
+    return
+  endif
+
+  for plugin in a:plugins
+    " 参数验证
+    if len(plugin) < 2
+      echohl ErrorMsg
+      echo '错误: 插件条目格式至少需要 [插件名称, Git命令]'
+      echohl None
+      continue
+    endif
+
+    let name = plugin[0]           " 插件名称（安装后的目录名）
+    let git_cmd = plugin[1]        " 完整的Git克隆命令
+    let install_type = get(plugin, 2, 'start')  " 默认为 'start'
+
+    " 确定安装路径
+    let install_dir = install_type =~? 'opt' ? g:plugins_opt_dir : g:plugins_start_dir
+    let install_path = install_dir . '/' . name
+
+    " 检查插件是否已安装
+    if !isdirectory(install_path)
+      " 构建并执行Git命令
+      let cmd = git_cmd . ' ' . shellescape(install_path)
+      let result = system(cmd)
+
+      " 检查命令执行结果
+      if v:shell_error != 0
+        echohl ErrorMsg
+        echo 'Failed to install plugin: ' . name
+        echo 'Executed command: ' . cmd
+        echo 'Error output: ' . result
+        echohl None
+      else
+        echomsg 'Plugin installed successfully: ' . name . ' (' . install_type . ')'
+      endif
+    else
+      echomsg 'Plugin already installed: ' . name . ' (' . install_type . ')'
+    endif
+  endfor
+endfunction
+
+" ============================================================================
+" 函数名称: LegacyLoadPluginConfig
+" 功能描述: 加载已安装插件的配置文件
+" ============================================================================
+function! LegacyLoadPluginConfig()
+  for f in split(glob(g:custom_packpath . '/plugins-config/*.vim'), '\n')
+    " 从配置文件名提取插件名
+    let plugin_name = fnamemodify(f, ':t:r')
+
+    " 检查插件是否存在（先查start目录，再查opt目录）
+    let plugin_path = g:plugins_start_dir . '/' . plugin_name
+    if !isdirectory(expand(plugin_path))
+      let plugin_path = g:plugins_opt_dir . '/' . plugin_name
+    endif
+
+    if isdirectory(expand(plugin_path))
+      execute 'source' f
+      echomsg 'Loaded config for: ' . plugin_name
+    else
+      echomsg 'Skipped missing plugin: ' . plugin_name
+    endif
+  endfor
+endfunction
+
+" 插件安装列表
+let s:plugin_list = [
+  \ ['coc.nvim', 'git clone --depth 1 --branch release https://github.com/neoclide/coc.nvim.git'],
+  \ ['vim-fugitive', 'git clone --depth 1 https://github.com/tpope/vim-fugitive.git'],
+  \ ['indentLine', 'git clone --depth 1 https://github.com/Yggdroot/indentLine.git'],
+  \ ['vim-startify', 'git clone --depth 1 https://github.com/mhinz/vim-startify'],
+  \ ['vim-surround', 'git clone --depth 1 https://github.com/tpope/vim-surround'],
+  \ ['vim-sandwich', 'git clone --depth 1 https://github.com/machakann/vim-sandwich'],
+  \ ['fzf', 'git clone --depth 1 https://github.com/junegunn/fzf.git'],
+  \ ['fzf.vim', 'git clone --depth 1 https://github.com/junegunn/fzf.vim.git'],
+  \ ['lightline.vim', 'git clone --depth 1 https://github.com/itchyny/lightline.vim'],
+  \ ]
+
+" 安装插件
+try
+  silent call LegacyInstallPlugin(s:plugin_list)
+catch
+  echohl ErrorMsg
+  echo "插件安装出错: " . v:exception
+  echohl None
+endtry
+
+" 加载插件配置
+try
+  silent call LegacyLoadPluginConfig()
+catch
+  echohl ErrorMsg
+  echo "加载插件配置出错: " . v:exception
+  echohl None
+endtry
