@@ -1,23 +1,20 @@
 # 什么环境都不apply的文件
-.config/rofi
 .github
 .vscode
 bootstrap.sh
 chezmoi.toml
 README.md
 
-# 只有windows下才使用的文件
 {{- if ne .chezmoi.os "windows" }}
+.config/ahk
 .config/PowerShell
 .config/yasb
 .local/bin/*.ps1
-
-scoop
 .wslconfig
+scoop
 {{- end }}
 
-# 除了windows之外才使用的文件
-{{- if eq .chezmoi.os "windows" }}
+{{- if ne .chezmoi.os "linux" }}
 .config/alacritty
 .config/autostart
 .config/bash
@@ -48,23 +45,28 @@ scoop
 .config/zellij
 .config/zsh
 .local
-.urxvt
 .Xmodmap
 .Xresources
 {{- end }}
 
-# 只有NixOS才使用的文件
-{{- if .chezmoi.osRelease }}
-  {{- if ne .chezmoi.osRelease.id "nixos" }}
-  .config/nixos
-  {{- end}}
-{{- end}}
-
-# 只有android下才使用的文件
-{{- if ne .chezmoi.os "android" }}
-.termux
+{{- if ne .chezmoi.os "darwin" }}
+.config/alacritty
+.config/bash
+.config/fish
+.config/kitty
+.config/mpv
+.config/nix
+.config/nixpkgs
+.config/tmux
+.config/zellij
+.config/zsh
+.local
 {{- end }}
 
-{{- if eq .chezmoi.os "android" }}
-.config/hypr
+{{- if not .chezmoi.osRelease }}
+.config/nixos
+{{- end }}
+
+{{- if ne .chezmoi.os "android" }}
+.termux
 {{- end }}
