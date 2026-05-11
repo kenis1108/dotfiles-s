@@ -1,3 +1,7 @@
+if not vim.g.kenvim_plugin_enable then
+  return
+end
+
 local map = vim.keymap.set
 local gh = function(x) return 'https://github.com/' .. x end
 
