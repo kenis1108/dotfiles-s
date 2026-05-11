@@ -63,6 +63,9 @@ if not type -q nix
   if test -e "$nix_daemon_fish_path"
     source "$nix_daemon_fish_path"
   end
+end
+
+if type -q nix
   set nix_completion_fish_path '/nix/var/nix/profiles/default/share/fish/vendor_completions.d/nix.fish'
   if test -e "$nix_completion_fish_path"
     source "$nix_completion_fish_path"

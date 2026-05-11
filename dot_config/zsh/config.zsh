@@ -1,6 +1,12 @@
 # -------- variable --------
 . "$HOME/.config/bash/variable"
 
+# -------- application --------
+. "$HOME/.config/bash/application" 
+
+# -------- alias --------
+. "$HOME/.config/bash/alias"
+
 export ZSH="$HOME/.config/zsh"
 
 # -------- history --------
@@ -68,9 +74,3 @@ fi
 
 . $ZSH/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 . $ZSH/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-
-# -------- application --------
-. "$HOME/.config/bash/application" 
-
-# -------- alias --------
-. "$HOME/.config/bash/alias"

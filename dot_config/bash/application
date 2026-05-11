@@ -45,6 +45,20 @@ if command -v direnv &> /dev/null; then
   eval "$(direnv hook $SHELL_TYPE)"
 fi
 
+if command -v nix &>/dev/null; then
+  NIX_COMPLETION_BASH="/nix/var/nix/profiles/default/share/bash-completion/completions/nix"
+  NIX_COMPLETION_ZSH="/nix/var/nix/profiles/default/share/zsh/site-functions/_nix"
+
+  if [[ "$SHELL_TYPE" == "zsh" ]]; then
+    fpath=(
+      $NIX_COMPLETION_ZSH
+      $fpath
+    )
+  else
+    [[ -f "$NIX_COMPLETION_BASH" ]] && source "$NIX_COMPLETION_BASH"
+  fi
+fi
+
 # 判断是否是 WSL 环境
 if [ -n "$WSL_DISTRO_NAME" ]; then
   # 如果是 WSL 环境，执行 fcitx5 命令

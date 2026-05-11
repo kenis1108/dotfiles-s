@@ -56,7 +56,7 @@ rm -f "$LAZYGIT_DIR/$LAZYGIT_NAME"
 ln -sf "$HOME/.local/opt/lazygit/lazygit" "$HOME/.local/bin/lazygit"
 echo "[bootstrap] lazygit installed"
 
-YAZI_VERSION=26.1.22
+YAZI_VERSION=26.5.6
 YAZI_RELEASE_URL="https://github.com/sxyazi/yazi/releases/download/v${YAZI_VERSION}/yazi-x86_64-unknown-linux-gnu.zip"
 YAZI_NAME=yazi-x86_64-unknown-linux-gnu
 YAZI_DIR=$HOME/.local/opt/yazi
