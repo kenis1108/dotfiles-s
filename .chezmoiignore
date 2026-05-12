@@ -1,6 +1,9 @@
 # 什么环境都不apply的文件
 .github
 .vscode
+{{- if eq .chezmoi.username "codespace" }}
+.gitconfig
+{{- end }}
 bootstrap.sh
 chezmoi.toml
 README.md
@@ -17,12 +20,10 @@ scoop
 {{- if ne .chezmoi.os "linux" }}
 .config/alacritty
 .config/autostart
-.config/bash
 .config/cava
 .config/conky
 .config/cosmic
 .config/dunst
-.config/fish
 .config/foot
 .config/hypr
 .config/i3
@@ -42,25 +43,17 @@ scoop
 .config/tmux
 .config/waybar*
 .config/wpaperd
-.config/zellij
-.config/zsh
-.local
 .Xmodmap
 .Xresources
 {{- end }}
 
 {{- if ne .chezmoi.os "darwin" }}
 .config/alacritty
-.config/bash
-.config/fish
 .config/kitty
 .config/mpv
 .config/nix
 .config/nixpkgs
 .config/tmux
-.config/zellij
-.config/zsh
-.local
 {{- end }}
 
 {{- if not .chezmoi.osRelease }}
