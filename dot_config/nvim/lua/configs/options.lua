@@ -3,7 +3,7 @@
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = " "
 if not vim.g.lazy_did_setup then
-  vim.g.maplocalleader = "\\"
+	vim.g.maplocalleader = "\\"
 end
 
 vim.opt.number = true
@@ -18,26 +18,30 @@ vim.opt.showmode = false
 
 -- Sync clipboard between OS and Neovim.
 vim.schedule(function()
-  vim.opt.clipboard = "unnamedplus"
+	vim.opt.clipboard = "unnamedplus"
 end)
 
-local is_ssh = os.getenv('SSH_TTY') or os.getenv('SSH_CLIENT') or os.getenv('SSH_CONNECTION')
-local my_paste = function(reg) return function(lines) return vim.split(vim.fn.getreg('"'), '\n') end end
+local is_ssh = os.getenv("SSH_TTY") or os.getenv("SSH_CLIENT") or os.getenv("SSH_CONNECTION")
+local my_paste = function(reg)
+	return function(lines)
+		return vim.split(vim.fn.getreg('"'), "\n")
+	end
+end
 if is_ssh then
-  print('is_ssh',is_ssh)
-  vim.g.clipboard = {
-    name = 'OSC 52',
-    copy = {
-      ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
-      ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
-    },
-    paste = {
-      -- ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
-      -- ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
-      ['+'] = my_paste('+'),
-      ['*'] = my_paste('*'),
-    },
-  }
+	print("is_ssh", is_ssh)
+	vim.g.clipboard = {
+		name = "OSC 52",
+		copy = {
+			["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+			["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+		},
+		paste = {
+			-- ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+			-- ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+			["+"] = my_paste("+"),
+			["*"] = my_paste("*"),
+		},
+	}
 end
 
 -- Enable break indent
@@ -92,21 +96,27 @@ vim.opt.foldlevel = 99
 vim.opt.modeline = true
 vim.opt.modelines = 2
 
+-- wrap
+vim.opt.wrap = true
+vim.opt.linebreak = true
+vim.opt.textwidth = 0
+
 -- 检查是否为 Windows 系统
-if vim.fn.has('win32') == 1 then
-  -- 检测 pwsh 是否存在
-  local pwsh_exists = vim.fn.executable('pwsh') == 1
+if vim.fn.has("win32") == 1 then
+	-- 检测 pwsh 是否存在
+	local pwsh_exists = vim.fn.executable("pwsh") == 1
 
-  -- 选择合适的 shell
-  local shell = pwsh_exists and 'pwsh.exe' or 'powershell.exe'
+	-- 选择合适的 shell
+	local shell = pwsh_exists and "pwsh.exe" or "powershell.exe"
 
-  -- 配置终端选项
-  vim.opt.shell = shell
-  vim.opt.shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;'
-  vim.opt.shellredir = '-RedirectStandardOutput %s -NoNewWindow -Wait'
-  vim.opt.shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
-  vim.opt.shellquote = ''
-  vim.opt.shellxquote = ''
+	-- 配置终端选项
+	vim.opt.shell = shell
+	vim.opt.shellcmdflag =
+		"-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
+	vim.opt.shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait"
+	vim.opt.shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode"
+	vim.opt.shellquote = ""
+	vim.opt.shellxquote = ""
 end
 
 -- vim.opt.autocomplete = true
@@ -115,7 +125,7 @@ end
 vim.opt.autochdir = true
 
 vim.diagnostic.config({
-  virtual_lines = true, -- 开启虚拟行模式
+	virtual_lines = true, -- 开启虚拟行模式
 })
 vim.diagnostic.show()
 
