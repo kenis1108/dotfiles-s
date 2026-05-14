@@ -25,6 +25,7 @@ scoop
 .config/cosmic
 .config/dunst
 .config/foot
+.config/fuzzel
 .config/hypr
 .config/i3
 .config/kitty

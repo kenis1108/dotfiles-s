@@ -1,12 +1,6 @@
 # -------- variable --------
 . "$HOME/.config/bash/variable"
 
-# -------- application --------
-. "$HOME/.config/bash/application" 
-
-# -------- alias --------
-. "$HOME/.config/bash/alias"
-
 export ZSH="$HOME/.config/zsh"
 
 # -------- history --------
@@ -22,6 +16,10 @@ bindkey '^x^e' edit-command-line
 bindkey '\ee' edit-command-line # like fish
 
 # -------- completions --------
+if [ ! -d "$ZSH/completions" ]; then
+  mkdir -p $ZSH/completions
+fi
+fpath=($ZSH/completions $fpath)
 autoload -Uz compinit
 compinit
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'       # Case insensitive tab completion 设置补全时不区分大小写
@@ -74,3 +72,9 @@ fi
 
 . $ZSH/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 . $ZSH/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# -------- application 必须放在compinit之后 --------
+. "$HOME/.config/bash/application" 
+
+# -------- alias --------
+. "$HOME/.config/bash/alias"
