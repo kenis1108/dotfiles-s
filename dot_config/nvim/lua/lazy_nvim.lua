@@ -1,13 +1,25 @@
+local is_nvchad = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME:find("nvchad") ~= nil
+local is_lazyvim = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME:find("lazyvim") ~= nil
+
 return {
 	{ "nvim-tree/nvim-tree.lua", enabled = false },
 
 	{ "nvim-treesitter/nvim-treesitter", enabled = false },
 
-	{ "nvim-telescope/telescope.nvim", enabled = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME:find("nvchad") ~= nil },
+	{ "nvim-telescope/telescope.nvim", enabled = is_nvchad },
+
+	{
+		import = "nvchad.blink.lazyspec",
+		enabled = function()
+			if is_nvchad then
+				return "nvchad.blink.lazyspec"
+			end
+		end,
+	},
 
 	{
 		"folke/tokyonight.nvim",
-    enabled = vim.env.NVIM_APPNAME and vim.env.NVIM_APPNAME:find("lazyvim") ~= nil,
+		enabled = is_lazyvim,
 		opts = {
 			transparent = true,
 			styles = {
@@ -39,7 +51,7 @@ return {
 					mode = { "n", "x" },
 					"<leader>=",
 					function()
-						require("conform").format({ lsp_fallback = true })
+						require("conform").format({ async = true, lsp_format = "fallback" })
 					end,
 					desc = "general format file",
 				},
@@ -57,46 +69,13 @@ return {
 		event = "VeryLazy",
 		opts = {},
 		keys = {
-			{
-				"s",
-				mode = { "n", "x", "o" },
-				function()
-					require("flash").jump()
-				end,
-				desc = "Flash",
-			},
-			{
-				"S",
-				mode = { "n", "x", "o" },
-				function()
-					require("flash").treesitter()
-				end,
-				desc = "Flash Treesitter",
-			},
-			{
-				"r",
-				mode = "o",
-				function()
-					require("flash").remote()
-				end,
-				desc = "Remote Flash",
-			},
-			{
-				"R",
-				mode = { "o", "x" },
-				function()
-					require("flash").treesitter_search()
-				end,
-				desc = "Treesitter Search",
-			},
-			{
-				"<c-s>",
-				mode = { "c" },
-				function()
-					require("flash").toggle()
-				end,
-				desc = "Toggle Flash Search",
-			},
+      -- stylua: ignore start
+			{ "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+			{ "S", mode = { "n", "x", "o" }, function() require("flash").treesitter() end, desc = "Flash Treesitter" },
+			{ "r", mode = "o", function() require("flash").remote() end, desc = "Remote Flash" },
+      { "R", mode = { "o", "x" }, function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
+      { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
+			-- stylua: ignore end
 		},
 	},
 

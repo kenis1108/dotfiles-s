@@ -1,4 +1,4 @@
-" vim -u "~/.config/vim8/vimrc"
+" vim -u "~/.config/vim/config/vim8/vimrc"
 " ================
 " Startup Timing
 " ================
@@ -17,14 +17,14 @@ augroup END
 let &rtp = expand('~/.config/vim') . ',' . &rtp
 colorscheme tokyonight-night
 
-so ~/.config/vim8/configs/options.vim
-so ~/.config/vim8/configs/autocmds.vim
-so ~/.config/vim8/configs/keymaps.vim
+so ~/.config/vim/config/vim8/configs/options.vim
+so ~/.config/vim/config/vim8/configs/autocmds.vim
+so ~/.config/vim/config/vim8/configs/keymaps.vim
 
 " ===============
 " packpath
 " ===============
-let g:custom_packpath = expand('~/.config/vim8')
+let g:custom_packpath = expand('~/.config/vim/config/vim8')
 if !isdirectory(g:custom_packpath)
   call mkdir(g:custom_packpath, 'p')
 endif

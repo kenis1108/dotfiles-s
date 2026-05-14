@@ -3,19 +3,41 @@
   "mcp": {
     "chrome-devtools-auto": {
       "type": "local",
-      "command": ["npx", "chrome-devtools-mcp@latest", "--autoConnect"],
-      "enabled": false
+      "command": [
+        "npx",
+        "chrome-devtools-mcp@latest",
+        "--auto-connect"
+      ],
+      "enabled": true
     },
     "Figma Desktop": {
       "type": "remote",
       "url": "http://127.0.0.1:3845/mcp",
-      "enabled": false
+      "enabled": true
     },
     "shopify-dev-mcp": {
       "type": "local",
-      "command": ["npx", "-y", "@shopify/dev-mcp@latest"],
-      // "command": ["shopify-dev-mcp"],
-      "enabled": false
+      "command": [
+        "npx",
+        "-y",
+        "@shopify/dev-mcp@latest"
+      ],
+      "enabled": true
+    },
+    "desktop-commander": {
+      "type": "local",
+      "command": ["npx", "-y", "@wonderwhy-er/desktop-commander@latest"],
+      "enabled": true
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": false,
+      "headers": {
+        "CONTEXT7_API_KEY": "xxx"
+      }
     }
-  }
+  },
+  "plugin": [],
+  "provider": {}
 }
