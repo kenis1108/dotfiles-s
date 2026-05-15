@@ -247,7 +247,7 @@ def PluginPath(name: string): string
 enddef
 
 def Run(command: string, message = ''): string
-  const output = system(command)
+  const output = system(command .. ' 2>&1')
   if v:shell_error != 0
     Fail((empty(message) ? 'command failed' : message) .. ":\n" .. command .. "\n" .. output)
   endif
@@ -477,7 +477,7 @@ def PackAdd(spec: dict<any>, load: any)
     return
   endif
 
-  execute 'packadd' .. (Truthy(load) ? ' ' : '! ') .. fnameescape(spec.name)
+  execute 'packadd' .. (Truthy(load) ? ' ' : '! ') .. spec.name->escape(' ')
 enddef
 
 def RemoveActive(path: string)
