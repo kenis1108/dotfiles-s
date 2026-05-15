@@ -222,7 +222,6 @@ endfunction
 let s:plugin_list = [
   \ ['coc.nvim', 'git clone --depth 1 --branch release https://github.com/neoclide/coc.nvim.git'],
   \ ['vim-fugitive', 'git clone --depth 1 https://github.com/tpope/vim-fugitive.git'],
-  \ ['indentLine', 'git clone --depth 1 https://github.com/Yggdroot/indentLine.git'],
   \ ['vim-startify', 'git clone --depth 1 https://github.com/mhinz/vim-startify'],
   \ ['vim-surround', 'git clone --depth 1 https://github.com/tpope/vim-surround'],
   \ ['vim-sandwich', 'git clone --depth 1 https://github.com/machakann/vim-sandwich'],
