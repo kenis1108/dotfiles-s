@@ -17,9 +17,102 @@ augroup END
 let &rtp = expand('~/.config/vim') . ',' . &rtp
 colorscheme tokyonight-night
 
-so ~/.config/vim/config/vim8/configs/options.vim
-so ~/.config/vim/config/vim8/configs/autocmds.vim
-so ~/.config/vim/config/vim8/configs/keymaps.vim
+set mouse=a
+" set autochdir
+set termguicolors
+" set updatetime=300
+set belloff=all
+set laststatus=2
+set nocompatible
+set noswapfile
+set backspace=indent,eol,start
+set scrolloff=4
+set number relativenumber
+set signcolumn=yes
+" set fillchars=foldopen:,foldclose:,fold:\ ,foldsep:\ ,diff:╱,eob:\
+set encoding=utf-8
+set fileencoding=utf-8
+let &clipboard = exists('$SSH_TTY') ? '' : 'unnamed,unnamedplus'
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+set shiftwidth=2
+set tabstop=2
+set expandtab
+set shiftround
+set colorcolumn=80
+set wrap
+set textwidth=0
+set wrapmargin=0
+set breakindent
+set foldmethod=indent
+set foldlevel=99
+set confirm
+set autoread
+set autowrite
+set splitright
+set splitbelow
+set splitkeep=screen
+set modeline
+set modelines=1
+set secure
+set wildmenu
+set wildmode=longest:full,full
+set completeopt=menu,menuone,noselect
+set list
+set listchars=tab:»\ ,nbsp:␣,trail:·,eol:\ 
+filetype plugin indent on
+syntax enable
+
+let g:netrw_home = "~"
+
+let g:mapleader = " "
+let g:maplocalleader = "\\"
+
+" Move to window using the <ctrl> hjkl keys
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Resize window using <ctrl> arrow keys
+nnoremap <C-Up> <cmd>resize +2<cr>
+nnoremap <C-Down> <cmd>resize -2<cr>
+nnoremap <C-Left> <cmd>vertical resize -2<cr>
+nnoremap <C-Right> <cmd>vertical resize +2<cr>
+
+" Move Lines
+nnoremap <A-j> <cmd>execute 'move .+' .. v:count1<cr>==
+nnoremap <A-k> <cmd>execute 'move .-' .. (v:count1 + 1)<cr>==
+inoremap <A-j> <esc><cmd>m .+1<cr>==gi
+inoremap <A-k> <esc><cmd>m .-2<cr>==gi
+vnoremap <A-j> :<C-u>execute "'<,'>move '>+" .. v:count1<cr>gv=gv
+vnoremap <A-k> :<C-u>execute "'<,'>move '<-" .. (v:count1 + 1)<cr>gv=gv
+
+" Save File
+nnoremap <C-s> <cmd>w<cr><esc>
+inoremap <C-s> <cmd>w<cr><esc>
+xnoremap <C-s> <cmd>w<cr><esc>
+snoremap <C-s> <cmd>w<cr><esc>
+
+" Quit All
+nnoremap <C-q> <cmd>qa<cr>
+nnoremap <leader>q <cmd>q<cr>
+
+nnoremap <silent> <esc> <cmd>nohlsearch<cr><esc>
+inoremap <silent> <esc> <cmd>nohlsearch<cr><esc>
+snoremap <silent> <esc> <cmd>nohlsearch<cr><esc>
+
+" Netrw
+nnoremap <leader>e <cmd>Ve<cr>
+
+" Use <leader>v to trigger visual block mode
+nnoremap <leader>v <C-v>
+vnoremap <leader>v <C-v>
+
+nnoremap ; :
+inoremap jk <esc>
 
 " ===============
 " packpath

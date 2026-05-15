@@ -24,8 +24,6 @@ set scrolloff=4
 set number relativenumber
 set signcolumn=yes
 # set fillchars=foldopen:,foldclose:,fold:\ ,foldsep:\ ,diff:╱,eob:\
-set cursorline
-set cursorlineopt=both
 set encoding=utf-8
 set fileencoding=utf-8
 &clipboard = exists('$SSH_TTY') ? '' : 'unnamed,unnamedplus'
@@ -61,6 +59,8 @@ set list
 set listchars=tab:»\ ,nbsp:␣,trail:·,eol:\ 
 filetype plugin indent on
 syntax enable
+
+g:netrw_home = "~"
 
 g:mapleader = " "
 g:maplocalleader = "\\"
@@ -228,3 +228,4 @@ g:VimSuggestSetOptions({
     prefixlen: 1,
   }
 })
+
