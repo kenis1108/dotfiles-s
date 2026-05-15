@@ -103,43 +103,52 @@ return {
 			picker = { enable = true },
 			scroll = { enable = true },
 		},
-		keys = {
-			{
-				"<leader>f",
-				function()
-					Snacks.picker()
-				end,
-				desc = "Open Snacks Picker",
-			},
-			{
-				"<leader>fc",
-				function()
-					Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
-				end,
-				desc = "Find Config File",
-			},
-			{
-				"<leader>fd",
-				function()
-					Snacks.picker.files({ cwd = require("lazy.core.config").options.root or vim.fn.stdpath("data") })
-				end,
-				desc = "Find Plugins Data",
-			},
-			{
-				"<leader>/c",
-				function()
-					Snacks.picker.grep({ cwd = vim.fn.stdpath("config") })
-				end,
-				desc = "Grep Config File",
-			},
-			{
-				"<leader>/d",
-				function()
-					Snacks.picker.grep({ cwd = require("lazy.core.config").options.root or vim.fn.stdpath("data") })
-				end,
-				desc = "Grep Plugins Data",
-			},
-		},
+		keys = function()
+			return {
+				{
+					"<leader>f",
+					function()
+						Snacks.picker()
+					end,
+					desc = "Open Snacks Picker",
+				},
+				{
+					"<leader>fc",
+					function()
+						Snacks.picker.files({ cwd = vim.fn.stdpath("config") })
+					end,
+					desc = "Find Config File",
+				},
+				{
+					"<leader>fd",
+					function()
+						Snacks.picker.files({ cwd = require("lazy.core.config").options.root or vim.fn.stdpath("data") })
+					end,
+					desc = "Find Plugins Data",
+				},
+				{
+					"<leader>/",
+					function()
+						Snacks.picker.grep({ hidden = true })
+					end,
+					desc = "Grep Live",
+				},
+				{
+					"<leader>/c",
+					function()
+						Snacks.picker.grep({ cwd = vim.fn.stdpath("config") })
+					end,
+					desc = "Grep Config File",
+				},
+				{
+					"<leader>/d",
+					function()
+						Snacks.picker.grep({ cwd = require("lazy.core.config").options.root or vim.fn.stdpath("data") })
+					end,
+					desc = "Grep Plugins Data",
+				},
+			}
+		end,
 	},
 
 	{
