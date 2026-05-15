@@ -129,4 +129,4 @@ vim.diagnostic.config({
 })
 vim.diagnostic.show()
 
-vim.g.kenvim_plugin_enable = false
+vim.g.kenvim_plugin_enable = true
