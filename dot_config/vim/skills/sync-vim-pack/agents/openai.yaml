@@ -1,0 +1,4 @@
+interface:
+  display_name: "Sync Vim Pack"
+  short_description: "Update Vim9 pack.vim from Neovim pack.lua."
+  default_prompt: "Use $sync-vim-pack to synchronize pluginvim9/pack.vim with a provided Neovim runtime lua/vim/pack.lua while preserving Vim package semantics."
